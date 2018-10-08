@@ -17,7 +17,8 @@ namespace demo_db.core
             var container = builder.Build();
 
             var engine = container.Resolve<IEngine>();
-
+            //WTF/per minute
+            ExportToPDF.ExportToPDF.GeneratePDFReport();
             engine.Run();
         }
     }
