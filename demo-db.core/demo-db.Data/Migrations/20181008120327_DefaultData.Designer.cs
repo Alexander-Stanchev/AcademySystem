@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using demo_db.Data.Context;
 
 namespace demo_db.Data.Migrations
 {
     [DbContext(typeof(AcademyContext))]
-    partial class AcademyContextModelSnapshot : ModelSnapshot
+    [Migration("20181008120327_DefaultData")]
+    partial class DefaultData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,8 +147,7 @@ namespace demo_db.Data.Migrations
                     b.HasData(
                         new { Id = 1, Deleted = false, FullName = "Uchitelq Yoda", Password = "parola", RegisteredOn = new DateTime(2016, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), RoleId = 3, UserName = "Yo666" },
                         new { Id = 2, Deleted = false, FullName = "Pesho Goshev", Password = "abc123", RegisteredOn = new DateTime(2016, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), RoleId = 2, UserName = "pesho04" },
-                        new { Id = 3, Deleted = false, FullName = "Penka Tosheva", Password = "toniStoraro22", RegisteredOn = new DateTime(2016, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), RoleId = 2, UserName = "gosho007" },
-                        new { Id = 4, Deleted = false, FullName = "Stenley Rois", Password = "toniStoraro23", RegisteredOn = new DateTime(2016, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), RoleId = 1, UserName = "shefanarelefa" }
+                        new { Id = 3, Deleted = false, FullName = "Penka Tosheva", Password = "toniStoraro22", RegisteredOn = new DateTime(2016, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), RoleId = 2, UserName = "gosho007" }
                     );
                 });
 

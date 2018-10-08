@@ -1,10 +1,11 @@
 ﻿using demo_db.Data.DataModels;
 using Microsoft.EntityFrameworkCore;
-
+using Newtonsoft.Json;
+using System.IO;
 
 namespace demo_db.Data.Context
 {
-    public class AcademyContext : DbContext
+    public class AcademyContext : DbContext, IAcademyContext
     {
 
         public DbSet<User> Users { get; set; }
@@ -31,6 +32,19 @@ namespace demo_db.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                .Property(u => u.Id)
+                .ValueGeneratedOnAdd();
+            if((File.Exists("../demo-db.Data/Files/roles.json")) && (File.Exists("../demo-db.Data/Files/users.json")))
+            {
+                var roles = JsonConvert.DeserializeObject<Role[]>(File.ReadAllText("../demo-db.Data/Files/roles.json"));
+                var users = JsonConvert.DeserializeObject<User[]>(File.ReadAllText("../demo-db.Data/Files/users.json"));
+
+                modelBuilder.Entity<Role>().HasData(roles);
+                modelBuilder.Entity<User>().HasData(users);
+            }
+
+
             modelBuilder.Entity<EnrolledStudent>()
                 .HasKey(e => new { e.CourseId, e.StudentId });
 

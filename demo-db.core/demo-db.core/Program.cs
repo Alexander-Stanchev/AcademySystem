@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Autofac;
+using demo_db.core.Contracts;
+using demo_db.core.InjectionLogic;
+using System;
+using System.Reflection;
 
 namespace demo_db.core
 {
@@ -6,7 +10,15 @@ namespace demo_db.core
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var builder = new ContainerBuilder();
+
+            builder.RegisterAssemblyModules(Assembly.GetAssembly(typeof(InjectorModule)));
+
+            var container = builder.Build();
+
+            var engine = container.Resolve<IEngine>();
+
+            engine.Run();
         }
     }
 }

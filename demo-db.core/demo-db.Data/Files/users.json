@@ -1,0 +1,42 @@
+[
+  {
+    "Id": "1",
+    "UserName": "Yo666",
+    "Password": "parola",
+    "FullName": "Uchitelq Yoda",
+    "MentorId": "",
+    "RoleId": 3,
+    "Deleted": 0,
+    "RegisteredOn": "12-21-16"
+  },
+  {
+    "Id": "2",
+    "UserName": "pesho04",
+    "Password": "abc123",
+    "FullName": "Pesho Goshev",
+    "MentorId": "",
+    "RoleId": 2,
+    "Deleted": 0,
+    "RegisteredOn": "12-21-16"
+  },
+  {
+    "Id": "3",
+    "UserName": "gosho007",
+    "Password": "toniStoraro22",
+    "FullName": "Penka Tosheva",
+    "MentorId": "",
+    "RoleId": 2,
+    "Deleted": 0,
+    "RegisteredOn": "12-21-16"
+  },
+  {
+    "Id": "4",
+      "UserName": "shefanarelefa",
+      "Password": "toniStoraro23",
+      "FullName": "Stenley Rois",
+      "MentorId": "",
+      "RoleId": 1,
+      "Deleted": 0,
+      "RegisteredOn": "12-21-16"
+    }
+]
