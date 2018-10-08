@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>demo_db.Data</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20181008075345_EnrolledStudentsTableAdded.cs" />
+    <Compile Remove="Migrations\20181008075750_enrolledStudentsTableAdded.cs" />
+    <Compile Remove="Migrations\20181008080002_enrolledStudentsTableAdded.cs" />
+    <Compile Remove="Migrations\20181008080709_GradesAdded.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
+  </ItemGroup>
+
+</Project>
