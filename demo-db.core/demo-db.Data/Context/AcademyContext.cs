@@ -32,18 +32,25 @@ namespace demo_db.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .Property(u => u.Id)
-                .ValueGeneratedOnAdd();
-            if((File.Exists("../demo-db.Data/Files/roles.json")) && (File.Exists("../demo-db.Data/Files/users.json")))
+
+
+            if (File.Exists("../demo-db.Data/Files/roles.json") &&
+                File.Exists("../demo-db.Data/Files/users.json") &&
+                File.Exists("../demo-db.Data/Files/courses.json") &&
+                File.Exists("../demo-db.Data/Files/assignments.json"))
             {
                 var roles = JsonConvert.DeserializeObject<Role[]>(File.ReadAllText("../demo-db.Data/Files/roles.json"));
                 var users = JsonConvert.DeserializeObject<User[]>(File.ReadAllText("../demo-db.Data/Files/users.json"));
+                var courses = JsonConvert.DeserializeObject<Course[]>(File.ReadAllText("../demo-db.Data/Files/courses.json"));
+                var assignments = JsonConvert.DeserializeObject<Assaignment[]>(File.ReadAllText("../demo-db.Data/Files/assignments.json"));
 
                 modelBuilder.Entity<Role>().HasData(roles);
                 modelBuilder.Entity<User>().HasData(users);
-            }
 
+                modelBuilder.Entity<Course>().HasData(courses);
+                modelBuilder.Entity<Assaignment>().HasData(assignments);
+
+            }
 
             modelBuilder.Entity<EnrolledStudent>()
                 .HasKey(e => new { e.CourseId, e.StudentId });

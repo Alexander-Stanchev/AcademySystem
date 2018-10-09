@@ -1,0 +1,16 @@
+[
+	{
+	"CourseId":"1",
+	"Name":"Alpha .NET",
+	"TeacherId":"2",
+	"Start":"12-21-17",
+	"End":"6-21-18"
+	},
+	{
+	"CourseId":"2",
+	"Name":"Alpha Java",
+	"TeacherId":"3",
+	"Start":"10-21-17",
+	"End":"4-21-18"
+	}
+]

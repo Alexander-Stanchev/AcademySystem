@@ -1,0 +1,44 @@
+[
+	{
+	"Id":"1",
+	"Name":"OOP Assignment 1",
+	"CourseId":1,
+	"MaxPoints":100,
+	"DateTime":"12-25-17"
+	},
+	{
+	"Id":"2",
+	"Name":"OOP Assignment 2",
+	"CourseId":1,
+	"MaxPoints":100,
+	"DateTime":"01-04-18"
+	},
+	{
+	"Id":"3",
+	"Name":"OOP Assignment 3",
+	"CourseId":1,
+	"MaxPoints":100,
+	"DateTime":"01-08-18"
+	},
+	{
+	"Id":"4",
+	"Name":"DSA Assignment 1",
+	"CourseId":2,
+	"MaxPoints":100,
+	"DateTime":"01-10-18"
+	},
+	{
+	"Id":"5",
+	"Name":"DSA Assignment 2",
+	"CourseId":2,
+	"MaxPoints":100,
+	"DateTime":"01-14-18"
+	},
+	{
+	"Id":"6",
+	"Name":"DSA Assignment 3",
+	"CourseId":2,
+	"MaxPoints":50,
+	"DateTime":"01-18-18"
+	}
+]

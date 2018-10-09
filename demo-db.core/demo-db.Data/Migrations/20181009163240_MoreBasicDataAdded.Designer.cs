@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using demo_db.Data.Context;
 
 namespace demo_db.Data.Migrations
 {
     [DbContext(typeof(AcademyContext))]
-    partial class AcademyContextModelSnapshot : ModelSnapshot
+    [Migration("20181009163240_MoreBasicDataAdded")]
+    partial class MoreBasicDataAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,8 +122,8 @@ namespace demo_db.Data.Migrations
 
                     b.HasData(
                         new { Id = 1, Name = "Admin" },
-                        new { Id = 2, Name = "Teacher" },
-                        new { Id = 3, Name = "Student" }
+                        new { Id = 2, Name = "Student" },
+                        new { Id = 3, Name = "Teacher" }
                     );
                 });
 

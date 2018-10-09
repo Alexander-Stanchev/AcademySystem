@@ -5,10 +5,10 @@
   },
   {
     "Id": "2",
-    "Name": "Student"
+    "Name": "Teacher"
   },
   {
     "Id": "3",
-    "Name": "Teacher"
+    "Name": "Student"
   }
 ]

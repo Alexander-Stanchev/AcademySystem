@@ -7,8 +7,8 @@ namespace demo_db.core.Common
     public enum RoleEnum
     {
         Administrator,
-        Student,
-        Teacher
+        Teacher,
+        Student
 
     }
 }

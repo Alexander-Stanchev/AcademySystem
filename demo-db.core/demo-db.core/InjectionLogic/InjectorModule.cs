@@ -9,6 +9,8 @@ using demo_db.core.Core;
 using demo_db.Data.Context;
 using demo_db.Services;
 using demo_db.Services.Abstract;
+using demo_db.Data.Repositories;
+using demo_db.Data.Repositories.Contracts;
 
 namespace demo_db.core.InjectionLogic
 {
@@ -30,11 +32,16 @@ namespace demo_db.core.InjectionLogic
             builder.RegisterType<CommandParser>().As<IParser>().SingleInstance();
             builder.RegisterType<CommandProcessor>().As<IProcessor>().SingleInstance();
             builder.RegisterType<SessionState>().As<ISessionState>().SingleInstance();
-            builder.RegisterType<AcademyContext>().As<IAcademyContext>();
+            builder.RegisterType<AcademyContext>().As<IAcademyContext>().SingleInstance();
+            builder.RegisterType<DataHandler>().As<IDataHandler>();
+            builder.RegisterType<AssaignmentRepositoryEF>().As<IAssaignmentRepositoryEF>();
+            builder.RegisterType<CourseRepositoryEF>().As<ICourseRepositoryEF>();
+            builder.RegisterType<UserRepositoryEF>().As<IUserRepositoryEF>();
         }
         private void RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterType<UserService>().As<IUserService>();
+            builder.RegisterType<CourseService>().As<ICourseService>();
         }
         private void RegisterCommands(ContainerBuilder builder)
         {

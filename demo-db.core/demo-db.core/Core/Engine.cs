@@ -8,6 +8,7 @@ namespace demo_db.core.Core
 {
     public class Engine : IEngine
     {
+        private const string endCommand = "end";
         public Engine(IReader reader, IWriter writer, IProcessor processor, ISessionState state)
         {
             this.Reader = reader;
@@ -43,6 +44,27 @@ namespace demo_db.core.Core
 
             }
             this.Writer.WriteLine($"Logged user: {this.State.UserName} with role: {(RoleEnum)(this.State.RoleId-1)}");
+            while (true)
+            {
+                var command = this.Reader.ReadLine();
+                if (command.ToLower() == Engine.endCommand.ToLower())
+                {
+                    break;
+                }
+                else
+                {
+                    try
+                    {
+                        var execution = this.Processor.ProcessCommand(command);
+                        this.Writer.WriteLine(execution);
+                    }
+                    catch(Exception ex)
+                    {
+                        this.Writer.WriteLine(ex.Message);
+                    }
+                }
+
+            }
         }
     }
 }
