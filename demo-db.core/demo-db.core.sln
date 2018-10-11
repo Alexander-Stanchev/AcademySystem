@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo-db.core", "demo-db.cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo-db.Data", "demo-db.Data\demo-db.Data.csproj", "{A5F06A99-4086-4A63-81C1-99098EAF23B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo-db.Services", "Services\demo-db.Services.csproj", "{28A55FB8-BA7C-4030-8CB3-561B95B3324F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo-db.Services", "Services\demo-db.Services.csproj", "{28A55FB8-BA7C-4030-8CB3-561B95B3324F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo-db.Common", "demo-db.Common\demo-db.Common.csproj", "{EDA0024D-19C3-4F06-847F-349318AF50DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{28A55FB8-BA7C-4030-8CB3-561B95B3324F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A55FB8-BA7C-4030-8CB3-561B95B3324F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A55FB8-BA7C-4030-8CB3-561B95B3324F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDA0024D-19C3-4F06-847F-349318AF50DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA0024D-19C3-4F06-847F-349318AF50DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA0024D-19C3-4F06-847F-349318AF50DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA0024D-19C3-4F06-847F-349318AF50DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

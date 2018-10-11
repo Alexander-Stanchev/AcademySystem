@@ -1,7 +1,7 @@
-﻿using demo_db.core.Contracts;
+﻿using demo_db.Common.Enum;
+using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
-
-
+using System;
 
 namespace demo_db.core.Commands
 {
@@ -24,21 +24,16 @@ namespace demo_db.core.Commands
             {
                 string userName = parameters[0];
                 string password = parameters[1];
-                var user = service.RetrieveUser(userName);
-                if(user == null)
+                try
                 {
-                    return "User doesn't exist";
+                    var role = this.service.LoginUser(userName, password);
+                    this.State.Login(role,userName);
+                    return $"User {userName} succesfully logged. Your role is {(RoleEnum)(role-1)}";
                 }
-                else if(user.Password == password)
+                catch(Exception ex)
                 {
-                    this.State.Login(user.RoleId, user.UserName);
-                    return $"User {user.UserName} succesfully logged. Your role is {user.Role.Name}";
+                    return ex.Message;
                 }
-                else
-                {
-                    return "Invalid password";
-                }
-
             }
         }
     }

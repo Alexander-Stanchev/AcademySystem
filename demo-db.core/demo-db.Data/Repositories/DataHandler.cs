@@ -7,22 +7,75 @@ namespace demo_db.Data.Repositories
     public class DataHandler : IDataHandler
     {
         private readonly IAcademyContext context;
+        private IAssaignmentRepositoryEF assaignments;
+        private ICourseRepositoryEF courses;
+        private IUserRepositoryEF users;
 
-        public DataHandler(IAcademyContext context, IAssaignmentRepositoryEF assaignments, ICourseRepositoryEF courses, IUserRepositoryEF users, IRoleRepositoryEF roles)
+        public DataHandler(IAcademyContext context)
         {
-            this.Assaignments = assaignments;
-            this.Courses = courses;
-            this.Users = users;
             this.context = context;
-            this.Roles = roles;
         }
-        public IAssaignmentRepositoryEF Assaignments { get; private set; }
+        public IAssaignmentRepositoryEF Assaignments
+        {
+            get
+            {
+                if(this.assaignments == null)
+                {
+                    this.assaignments = new AssaignmentRepositoryEF(context);
+                    return this.assaignments; 
+                }
+                else
+                {
+                    return this.assaignments;
+                }
+            }
+            private set
+            {
+                this.assaignments = value;
+            }
 
-        public ICourseRepositoryEF Courses { get; private set; }
+        }
 
-        public IUserRepositoryEF Users { get; private set; }
+        public ICourseRepositoryEF Courses
+        {
+            get
+            {
+                if(this.courses == null)
+                {
+                    this.courses = new CourseRepositoryEF(context);
+                    return this.courses;
+                    
+                }
+                else
+                {
+                    return this.courses;
+                }
+            }
+            private set
+            {
+                this.courses = value;
+            }
+        }
 
-        public IRoleRepositoryEF Roles { get; private set; }
+        public IUserRepositoryEF Users
+        {
+            get
+            {
+                if(this.users == null)
+                {
+                    this.users = new UserRepositoryEF(context);
+                    return this.users;
+                }
+                else
+                {
+                    return this.users;
+                }
+            }
+            set
+            {
+                this.users = value;
+            }
+        }
 
         public int SaveChanges()
         {

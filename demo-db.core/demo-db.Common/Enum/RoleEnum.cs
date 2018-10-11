@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace demo_db.core.Common
+namespace demo_db.Common.Enum
 {
     public enum RoleEnum
     {

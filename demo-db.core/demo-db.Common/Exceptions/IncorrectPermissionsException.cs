@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace demo_db.core.Exceptions
+namespace demo_db.Common.Exceptions
 {
     public class IncorrectPermissionsException : Exception
     {

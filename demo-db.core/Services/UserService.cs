@@ -1,10 +1,10 @@
-﻿using demo_db.Data.Context;
-using demo_db.Data.DataModels;
+﻿using demo_db.Data.DataModels;
 using demo_db.Services.Abstract;
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using demo_db.Data.Repositories.Contracts;
+using demo_db.Common.Exceptions;
 
 namespace demo_db.Services
 {
@@ -20,38 +20,24 @@ namespace demo_db.Services
         public void AddUser(string username, string password, string fullname)
         {
             var user = RetrieveUser(username);
-            if(user == null)
+            if(user != null)
             {
-                user = new User
-                {
-                    UserName = username,
-                    Password = password,
-                    FullName = fullname,
-                    RoleId = 3,
-                    Deleted = false,
-                    RegisteredOn = DateTime.Now
-                };
+                throw new UserAlreadyExistsException("User already exists");
             }
+            user = new User
+            {
+                UserName = username,
+                Password = password,
+                FullName = fullname,
+                RoleId = 3,
+                Deleted = false,
+                RegisteredOn = DateTime.Now
+            };
             data.Users.Add(user);
             data.SaveChanges();
         }
 
-        public void UpdateUserRole(string username, Role newRole)
-        {
-            var user = RetrieveFullUser(username);
-            if (user == null)
-            {
-                throw new ArgumentNullException("User is null when trying to execute UpdateUserRole service");
-            }
-            else
-            {
-                user.RoleId = newRole.Id; 
-            }
-            data.Users.Update(user);
-            data.SaveChanges();
-        }
-
-        public User RetrieveUser(string username)
+        private User RetrieveUser(string username)
         {
             
             var user = this.data.Users.All()
@@ -61,7 +47,7 @@ namespace demo_db.Services
             return user;
         }
 
-        public User RetrieveFullUser(string username)
+        private User RetrieveFullUser(string username)
         {
             var user = this.data.Users.All()
                .Include(u => u.Role)
@@ -92,6 +78,20 @@ namespace demo_db.Services
                     throw new Exception();
                 }
             }
+        }
+
+        public int LoginUser(string username, string password)
+        {
+            var user = this.RetrieveUser(username);
+            if (user == null)
+            {
+                throw new UserDoesntExistsException("User doesn't exists.");
+            }
+            else if(user.Password != password)
+            {
+                throw new InvalidPasswordException("Invalid password");
+            }
+            return user.RoleId;
         }
     }
 }

@@ -1,17 +1,17 @@
-﻿using demo_db.Data.DataModels;
+﻿using demo_db.Common.Exceptions;
+using demo_db.Data.DataModels;
 using demo_db.Data.Repositories.Contracts;
 using demo_db.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
 
 namespace demo_db.Services
 {
     public class CourseService : ICourseService
     {
-        private IDataHandler data;
+        private readonly IDataHandler data;
 
         public CourseService(IDataHandler context)
         {
@@ -36,7 +36,33 @@ namespace demo_db.Services
             }
         }
 
-        public Course RetrieveCourse(string coursename)
+        public void EnrollStudent(string username, string coursename)
+        {
+            var user = this.data.Users.All().Include(us => us.EnrolledStudents).FirstOrDefault(us => us.UserName == username);
+            var course = this.data.Courses.All().FirstOrDefault(co => co.Name == coursename);
+
+            if(course == null)
+            {
+                throw new CourseDoesntExistsException("Unfortunately we are not offering such a course at the moment");
+            }
+            else if(user.EnrolledStudents.FirstOrDefault(es => es.CourseId == course.CourseId) != null)
+            {
+                throw new CourseAlreadyEnrolledException($"You are already enrolled for the course {course.Name}.");
+            }
+            else
+            {
+                var enrolled = new EnrolledStudent
+                {
+                    StudentId = user.Id,
+                    CourseId = course.CourseId
+                };
+                user.EnrolledStudents.Add(enrolled);
+                this.data.SaveChanges();
+            }
+
+        }
+
+        private Course RetrieveCourse(string coursename)
         {
             var course = this.data.Courses.All()
                 .Include(co => co.Teacher)

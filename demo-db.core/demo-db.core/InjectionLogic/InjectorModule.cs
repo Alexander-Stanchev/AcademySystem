@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using Autofac;
 using System.Linq;
 using demo_db.core.Contracts;
@@ -32,18 +29,14 @@ namespace demo_db.core.InjectionLogic
             builder.RegisterType<CommandParser>().As<IParser>().SingleInstance();
             builder.RegisterType<CommandProcessor>().As<IProcessor>().SingleInstance();
             builder.RegisterType<SessionState>().As<ISessionState>().SingleInstance();
-            builder.RegisterType<AcademyContext>().As<IAcademyContext>().SingleInstance();
+            builder.RegisterType<AcademyContext>().As<IAcademyContext>();
             builder.RegisterType<DataHandler>().As<IDataHandler>();
-            builder.RegisterType<AssaignmentRepositoryEF>().As<IAssaignmentRepositoryEF>();
-            builder.RegisterType<CourseRepositoryEF>().As<ICourseRepositoryEF>();
-            builder.RegisterType<UserRepositoryEF>().As<IUserRepositoryEF>();
-            builder.RegisterType<RoleRepositoryEF>().As<IRoleRepositoryEF>();
+
         }
         private void RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<CourseService>().As<ICourseService>();
-            builder.RegisterType<RoleService>().As<IRoleService>();
         }
         private void RegisterCommands(ContainerBuilder builder)
         {

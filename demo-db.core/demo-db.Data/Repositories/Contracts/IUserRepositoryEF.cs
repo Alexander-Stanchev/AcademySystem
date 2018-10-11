@@ -16,5 +16,6 @@ namespace demo_db.Data.Repositories.Contracts
         void Update(User entity);
 
         void Delete(User entity);
+
     }
 }

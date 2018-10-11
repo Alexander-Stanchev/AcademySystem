@@ -1,7 +1,4 @@
-﻿using demo_db.core.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
 namespace demo_db.core.Contracts
 {

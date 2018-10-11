@@ -1,8 +1,8 @@
-﻿using demo_db.core.Common;
+﻿using demo_db.Common.Enum;
+using demo_db.Common.Exceptions;
 using demo_db.core.Contracts;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace demo_db.core.Core
 {
@@ -31,25 +31,19 @@ namespace demo_db.core.Core
                this.Writer.WriteLine("Please login or register");
                this.Writer.WriteLine("For login use the following command: Login {username} {password}");
                this.Writer.WriteLine("For registration use the following command: Register {username} {password}");
-               
                var input = this.Reader.ReadLine();
                 try
                 {
                     var execution = this.Processor.ProcessCommand(input);
                     this.Writer.WriteLine(execution);
                 }
-                catch(ArgumentNullException ex)
+                catch(Exception ex)
                 {
                     this.Writer.WriteLine(ex.Message);
                 }
 
             }
             this.Writer.WriteLine($"Logged user: {this.State.UserName} with role: {(RoleEnum)(this.State.RoleId-1)}");
-            if((RoleEnum)(this.State.RoleId - 1) == RoleEnum.Administrator)
-            {
-                this.Writer.WriteLine("For changing the state of existing user use the following command: UpdateUserRole {username} {role}");
-            }
-
             while (true)
             {
                 var command = this.Reader.ReadLine();

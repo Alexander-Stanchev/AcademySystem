@@ -1,9 +1,7 @@
-﻿using demo_db.core.Contracts;
-using demo_db.core.Exceptions;
-using demo_db.Data.DataModels;
+﻿using demo_db.Common.Exceptions;
+using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
-using System;
-using System.Linq;
+
 
 
 namespace demo_db.core.Commands
@@ -31,24 +29,22 @@ namespace demo_db.core.Commands
             }
             else
             {
-                var user = this.serviceUser.RetrieveFullUser(this.State.UserName);
                 var courseName = string.Join(' ',parameters);
 
-                var course = this.serviceCourse.RetrieveCourse(courseName);
-                if(course == null)
-                {
-                    return $"Unfortunately such a course dosn't exist!";
-                }
                 try
                 {
-                    this.serviceUser.EnrollCourse(user, course);
-                }
-                catch(Exception)
-                {
-                    throw new CourseAlreadyEnrolledException("You are already enrolled for this course");
-                }
-                return $"User {user.UserName} succesfully enrolled in the course {course.Name}";
+                    this.serviceCourse.EnrollStudent(this.State.UserName, courseName);
+                    return $"User {this.State.UserName} succesfully enrolled in the course {courseName}";
 
+                }
+                catch(CourseAlreadyEnrolledException ex)
+                {
+                    return ex.Message;
+                }
+                catch(CourseDoesntExistsException ex)
+                {
+                    return ex.Message;
+                }
 
             }
         }

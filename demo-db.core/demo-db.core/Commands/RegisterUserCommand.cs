@@ -1,4 +1,5 @@
-﻿using demo_db.core.Contracts;
+﻿using demo_db.Common.Exceptions;
+using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System.Linq;
 
@@ -24,15 +25,14 @@ namespace demo_db.core.Commands
                 string userName = parameters[0];
                 string password = parameters[1];
                 string fullName = string.Join(' ',parameters.Skip(2));
-                var user = service.RetrieveUser(userName);
-                if (user != null)
+                try
                 {
-                    return "User already exist";
-                }
-                else
-                {
-                    service.AddUser(userName, password, fullName);
+                    this.service.AddUser(userName, password, fullName);
                     return $"User {userName} is registered. Now you can log in with your newly created password";
+                }
+                catch(UserAlreadyExistsException ex)
+                {                    
+                    return ex.Message;
                 }
 
             }
