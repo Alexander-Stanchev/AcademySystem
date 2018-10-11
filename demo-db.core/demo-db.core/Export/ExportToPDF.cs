@@ -14,59 +14,46 @@ namespace demo_db.core.ExportToPDF
         {
             try
             {
-                PdfPTable pdfTableBlank = new PdfPTable(1);
-                //Footer section
-                PdfPTable pdfTableFooter = new PdfPTable(1);
-                pdfTableFooter.DefaultCell.BorderWidth = 0;
-                pdfTableFooter.WidthPercentage = 100;
-                pdfTableFooter.DefaultCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                PdfPTable footer = new PdfPTable(1);
+                PdfPTable name = new PdfPTable(1);
+                PdfPTable table = new PdfPTable(3);
+                var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 16);
 
-                Chunk cnkFooter = new Chunk("STUDENT REPORT", FontFactory.GetFont("Times New Roman"));
-                cnkFooter.Font.Size = 10;
-                pdfTableFooter.AddCell(new Phrase(cnkFooter));
-                //End of footer section
+                Chunk c1 = new Chunk("STUDENT REPORT", boldFont);
+                footer.DefaultCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                footer.DefaultCell.Border = 0;
+                footer.AddCell(new Phrase(c1));
 
-                pdfTableBlank.AddCell(new Phrase(" "));
-                pdfTableBlank.DefaultCell.Border = 0;
+                Chunk studentName = new Chunk("Pesho Goshev", boldFont);
+                name.DefaultCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                name.DefaultCell.Border = 0;
+                name.AddCell(new Phrase(studentName));
 
-                PdfPTable pdfTable1 = new PdfPTable(1);
-                PdfPTable pdfTable2 = new PdfPTable(1);
-                PdfPTable pdfTable3 = new PdfPTable(2);
+                PdfPCell courses = new PdfPCell(new Phrase("Courses", boldFont));
+                PdfPCell assignments = new PdfPCell(new Phrase("Assignments", boldFont));
+                PdfPCell grades = new PdfPCell(new Phrase("Grades", boldFont));
 
-                pdfTable1.WidthPercentage = 80;
-                pdfTable1.DefaultCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                pdfTable1.DefaultCell.VerticalAlignment = Element.ALIGN_CENTER;
-                pdfTable1.DefaultCell.BorderWidth = 0;
+                table.TotalWidth = 400f;
+                table.LockedWidth = true;
+                table.AddCell(courses);
+                table.AddCell(assignments);
+                table.AddCell(grades);
+                table.AddCell("DSA");
 
-                pdfTable2.WidthPercentage = 80;
-                pdfTable2.DefaultCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                pdfTable2.DefaultCell.VerticalAlignment = Element.ALIGN_CENTER;
-                pdfTable2.DefaultCell.BorderWidth = 0;
+                PdfPTable nestedTabe1 = new PdfPTable(1);
+                PdfPCell nestedCell1 = new PdfPCell(nestedTabe1);
+                nestedCell1.Padding = 0f;
+                nestedTabe1.AddCell(new Phrase("Linear"));
+                nestedTabe1.AddCell(new Phrase("Tree"));
+                table.AddCell(nestedCell1);
 
-                pdfTable3.DefaultCell.Padding = 5;
-                pdfTable3.WidthPercentage = 80;
-                pdfTable3.DefaultCell.BorderWidth = 0.5f;
+                PdfPTable nestedTable2 = new PdfPTable(1);
+                PdfPCell nestedCell2 = new PdfPCell(nestedTable2);
+                nestedCell2.Padding = 0f;
+                nestedTable2.AddCell(new Phrase("32"));
+                nestedTable2.AddCell(new Phrase("2"));
+                table.AddCell(nestedCell2);
 
-
-                Chunk c1 = new Chunk("STUDENT REPORT", FontFactory.GetFont("Times New Roman"));
-                c1.Font.Color = new iTextSharp.text.BaseColor(0, 0, 0);
-                c1.Font.SetStyle(0); //- 0 for normal font
-                c1.Font.Size = 14;
-                Phrase p1 = new Phrase();
-                p1.Add(c1);
-                pdfTable1.AddCell(p1);
-
-                var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
-
-                Chunk courses = new Chunk("Courses", boldFont);
-                Chunk grades = new Chunk("Grades", boldFont);
-
-                pdfTable3.AddCell(new Phrase(courses));
-                pdfTable3.AddCell(new Phrase(grades));
-                pdfTable3.AddCell(new Phrase("Veganstvo"));
-                pdfTable3.AddCell(new Phrase("2.67"));
-
-                
                 string folderPath = ".\\PDF\\";
                 if (!Directory.Exists(folderPath))
                 {
@@ -78,13 +65,15 @@ namespace demo_db.core.ExportToPDF
 
                 using (FileStream stream = new FileStream(folderPath + strFileName, FileMode.Create))
                 {
-                    Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+                    Rectangle pageSize = new Rectangle(PageSize.A4);
+                    pageSize.BackgroundColor = new BaseColor(255, 180, 203);
+                    Document pdfDoc = new Document(pageSize);
+
                     PdfWriter.GetInstance(pdfDoc, stream);
                     pdfDoc.Open();
-                    pdfDoc.Add(pdfTable1);
-                    pdfDoc.Add(pdfTable2);
-                    pdfDoc.Add(pdfTableBlank);
-                    pdfDoc.Add(pdfTable3);
+                    pdfDoc.Add(footer);
+                    pdfDoc.Add(name);
+                    pdfDoc.Add(table);
                     pdfDoc.NewPage();
 
                     pdfDoc.Close();
@@ -93,7 +82,7 @@ namespace demo_db.core.ExportToPDF
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Cannot export to PDF");
             }
         }
     }
