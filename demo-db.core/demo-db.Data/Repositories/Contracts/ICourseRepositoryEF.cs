@@ -14,7 +14,5 @@ namespace demo_db.Data.Repositories.Contracts
         void Add(Course entity);
 
         void Update(Course entity);
-
-        void Delete(Course entity);
     }
 }

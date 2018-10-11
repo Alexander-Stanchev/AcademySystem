@@ -27,11 +27,6 @@ namespace demo_db.Data.Repositories
             this.context.Users.Add(entity);
         }
 
-        public void Delete(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Update(User entity)
         {
             context.Users.Update(entity);

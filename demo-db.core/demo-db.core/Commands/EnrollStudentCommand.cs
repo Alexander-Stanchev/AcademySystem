@@ -8,8 +8,8 @@ namespace demo_db.core.Commands
 {
     public class EnrollStudentCommand : CommandAbstract
     {
-        private IUserService serviceUser;
-        private ICourseService serviceCourse;
+        private readonly IUserService serviceUser;
+        private readonly ICourseService serviceCourse;
 
         public EnrollStudentCommand(ISessionState state, IUserService service, ICourseService course) : base(state)
         {
@@ -34,7 +34,8 @@ namespace demo_db.core.Commands
                 try
                 {
                     this.serviceCourse.EnrollStudent(this.State.UserName, courseName);
-                    return $"User {this.State.UserName} succesfully enrolled in the course {courseName}";
+                    var courses = this.serviceCourse.RetrieveCourseNames(this.State.UserName);
+                    return $"User {this.State.UserName} succesfully enrolled in the course {courseName}" + string.Join(" , ",courses);
 
                 }
                 catch(CourseAlreadyEnrolledException ex)

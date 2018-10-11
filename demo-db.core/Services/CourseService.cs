@@ -4,6 +4,7 @@ using demo_db.Data.Repositories.Contracts;
 using demo_db.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -34,6 +35,8 @@ namespace demo_db.Services
                     };
                 }
             }
+
+
         }
 
         public void EnrollStudent(string username, string coursename)
@@ -61,7 +64,14 @@ namespace demo_db.Services
             }
 
         }
-
+        public IEnumerable<string> RetrieveCourseNames(string username = "")
+        {
+            var user = this.data.Users.All().FirstOrDefault(us => us.UserName == username);
+            var userId = user.Id;
+            return this.data.Courses.All().Include(co => co.EnrolledStudents)
+                .Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
+                .Select(x=>x.Name).ToList();
+        }
         private Course RetrieveCourse(string coursename)
         {
             var course = this.data.Courses.All()

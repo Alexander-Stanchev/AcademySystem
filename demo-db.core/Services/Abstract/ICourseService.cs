@@ -1,6 +1,6 @@
 ﻿using demo_db.Data.DataModels;
 using System;
-
+using System.Collections.Generic;
 
 namespace demo_db.Services.Abstract
 {
@@ -8,6 +8,7 @@ namespace demo_db.Services.Abstract
     {
         void AddCourse(string coursename, int teacherID, DateTime start, DateTime end);
         void EnrollStudent(string username, string coursename);
+        IEnumerable<string> RetrieveCourseNames(string username = "");
 
     }
 }

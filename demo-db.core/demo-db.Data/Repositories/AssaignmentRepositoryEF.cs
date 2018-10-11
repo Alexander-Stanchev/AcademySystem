@@ -1,7 +1,6 @@
 ﻿using demo_db.Data.Context;
 using demo_db.Data.DataModels;
 using demo_db.Data.Repositories.Contracts;
-using System;
 using System.Linq;
 
 
@@ -24,11 +23,6 @@ namespace demo_db.Data.Repositories
         public void Add(Assaignment entity)
         {
             this.context.Assaignments.Add(entity);
-        }
-
-        public void Delete(Assaignment entity)
-        {
-            throw new NotImplementedException();
         }
 
         public void Update(Assaignment entity)
