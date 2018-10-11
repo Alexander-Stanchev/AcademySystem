@@ -8,7 +8,7 @@ namespace demo_db.Services.Abstract
     {
         void AddCourse(string coursename, int teacherID, DateTime start, DateTime end);
         void EnrollStudent(string username, string coursename);
-        IEnumerable<string> RetrieveCourseNames(string username = "");
+        IList<(string,string)> RetrieveCourseNames(string username = "");
 
     }
 }
