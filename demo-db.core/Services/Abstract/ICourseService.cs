@@ -1,4 +1,5 @@
 ﻿using demo_db.Data.DataModels;
+using demo_db.Services.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace demo_db.Services.Abstract
     {
         void AddCourse(string coursename, int teacherID, DateTime start, DateTime end);
         void EnrollStudent(string username, string coursename);
-        IList<(string,string)> RetrieveCourseNames(string username = "");
-
+        IList<CourseViewModel> RetrieveCourseNames(string username = "");
+        IList<GradeViewModel> RetrieveGrades(string username, string coursename);
     }
 }

@@ -31,11 +31,21 @@ namespace demo_db.core.Commands
             else
             {
                 var courses = this.serviceCourse.RetrieveCourseNames(this.State.UserName);
-                if (courses == null)
+                if (courses.Count == 0)
                 {
                     return "There are no available courses at this moment!";
                 }
-                return $"The available courses are:{string.Join(',', courses)}";
+                else
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine("The available courses are:");
+                    foreach (var course in courses)
+                    {
+                        sb.AppendLine($"Course: {course.CourseName} with teacher: {course.Teacher.FullName}");
+                    }
+                    return sb.ToString();
+                }
+
             }
         }
     }

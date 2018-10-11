@@ -2,6 +2,7 @@
 using demo_db.Data.DataModels;
 using demo_db.Data.Repositories.Contracts;
 using demo_db.Services.Abstract;
+using demo_db.Services.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,9 @@ namespace demo_db.Services
         public void AddCourse(string coursename, int teacherID, DateTime start, DateTime end)
         {
             var course = this.RetrieveCourse(coursename);
-            if(course == null)
+            if (course == null)
             {
-                if(course.Teacher.RoleId == 2)
+                if (course.Teacher.RoleId == 2)
                 {
                     course = new Course
                     {
@@ -44,11 +45,11 @@ namespace demo_db.Services
             var user = this.data.Users.All().Include(us => us.EnrolledStudents).FirstOrDefault(us => us.UserName == username);
             var course = this.data.Courses.All().FirstOrDefault(co => co.Name == coursename);
 
-            if(course == null)
+            if (course == null)
             {
                 throw new CourseDoesntExistsException("Unfortunately we are not offering such a course at the moment");
             }
-            else if(user.EnrolledStudents.FirstOrDefault(es => es.CourseId == course.CourseId) != null)
+            else if (user.EnrolledStudents.FirstOrDefault(es => es.CourseId == course.CourseId) != null)
             {
                 throw new CourseAlreadyEnrolledException($"You are already enrolled for the course {course.Name}.");
             }
@@ -64,7 +65,7 @@ namespace demo_db.Services
             }
 
         }
-        public IList<(string,string)> RetrieveCourseNames(string username = "")
+        public IList<CourseViewModel> RetrieveCourseNames(string username = "")
         {
             var user = this.data.Users.All().FirstOrDefault(us => us.UserName == username);
             var userId = user.Id;
@@ -73,13 +74,38 @@ namespace demo_db.Services
                 .Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
                 .ToList();
 
-            IList<(string, string)> returnValues = new List<(string, string)>();
+            IList<CourseViewModel> returnValues = new List<CourseViewModel>();
 
-            foreach(var course in courses)
+            foreach (var course in courses)
             {
-                returnValues.Add((course.Name, course.Teacher.FullName));
+                returnValues.Add(new CourseViewModel { Teacher = new UserViewModel { FullName = course.Teacher.FullName }, CourseName = course.Name });
             }
             return returnValues;
+        }
+        public IList<GradeViewModel> RetrieveGrades(string username, string coursename)
+        {
+            var user = this.data.Users.All()
+                .Include(us => us.Grades)
+                    .ThenInclude(gr => gr.Assaignment)
+                        .ThenInclude(a => a.Course)
+                .FirstOrDefault(us => us.UserName == username && us.EnrolledStudents.Any(es => es.Course.Name == coursename));
+
+            if (user == null)
+            {
+                throw new NotEnrolledInCourseException("You are not assigned to this course");
+            }
+
+            IList<GradeViewModel> gradesMapped = new List<GradeViewModel>();
+
+            foreach (var grade in user.Grades)
+            {
+                if(grade.Assaignment.Course.Name == coursename)
+                {
+                    gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
+                }
+                
+            }
+            return gradesMapped;
         }
         private Course RetrieveCourse(string coursename)
         {
