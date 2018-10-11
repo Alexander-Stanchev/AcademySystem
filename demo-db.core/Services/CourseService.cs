@@ -64,13 +64,22 @@ namespace demo_db.Services
             }
 
         }
-        public IEnumerable<string> RetrieveCourseNames(string username = "")
+        public IList<(string,string)> RetrieveCourseNames(string username = "")
         {
             var user = this.data.Users.All().FirstOrDefault(us => us.UserName == username);
             var userId = user.Id;
-            return this.data.Courses.All().Include(co => co.EnrolledStudents)
+            var courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
+                .Include(co => co.Teacher)
                 .Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
-                .Select(x=>x.Name).ToList();
+                .ToList();
+
+            IList<(string, string)> returnValues = new List<(string, string)>();
+
+            foreach(var course in courses)
+            {
+                returnValues.Add((course.Name, course.Teacher.FullName));
+            }
+            return returnValues;
         }
         private Course RetrieveCourse(string coursename)
         {

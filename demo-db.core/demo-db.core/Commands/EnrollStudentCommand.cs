@@ -34,8 +34,7 @@ namespace demo_db.core.Commands
                 try
                 {
                     this.serviceCourse.EnrollStudent(this.State.UserName, courseName);
-                    var courses = this.serviceCourse.RetrieveCourseNames(this.State.UserName);
-                    return $"User {this.State.UserName} succesfully enrolled in the course {courseName}" + string.Join(" , ",courses);
+                    return $"User {this.State.UserName} succesfully enrolled in the course {courseName}";
 
                 }
                 catch(CourseAlreadyEnrolledException ex)
