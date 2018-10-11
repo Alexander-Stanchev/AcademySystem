@@ -31,6 +31,7 @@ namespace demo_db.core.Core
                this.Writer.WriteLine("Please login or register");
                this.Writer.WriteLine("For login use the following command: Login {username} {password}");
                this.Writer.WriteLine("For registration use the following command: Register {username} {password}");
+               
                var input = this.Reader.ReadLine();
                 try
                 {
@@ -44,6 +45,11 @@ namespace demo_db.core.Core
 
             }
             this.Writer.WriteLine($"Logged user: {this.State.UserName} with role: {(RoleEnum)(this.State.RoleId-1)}");
+            if((RoleEnum)(this.State.RoleId - 1) == RoleEnum.Administrator)
+            {
+                this.Writer.WriteLine("For changing the state of existing user use the following command: UpdateUserRole {username} {role}");
+            }
+
             while (true)
             {
                 var command = this.Reader.ReadLine();

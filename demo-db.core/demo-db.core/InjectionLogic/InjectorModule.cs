@@ -37,11 +37,13 @@ namespace demo_db.core.InjectionLogic
             builder.RegisterType<AssaignmentRepositoryEF>().As<IAssaignmentRepositoryEF>();
             builder.RegisterType<CourseRepositoryEF>().As<ICourseRepositoryEF>();
             builder.RegisterType<UserRepositoryEF>().As<IUserRepositoryEF>();
+            builder.RegisterType<RoleRepositoryEF>().As<IRoleRepositoryEF>();
         }
         private void RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<CourseService>().As<ICourseService>();
+            builder.RegisterType<RoleService>().As<IRoleService>();
         }
         private void RegisterCommands(ContainerBuilder builder)
         {

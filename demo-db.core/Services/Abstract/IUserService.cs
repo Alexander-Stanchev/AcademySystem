@@ -11,6 +11,7 @@ namespace demo_db.Services.Abstract
         void EnrollCourse(User user, Course course);
         User RetrieveUser(string username);
         User RetrieveFullUser(string username);
+        void UpdateUserRole(string username, Role newRole);
 
     }
 }

@@ -36,6 +36,21 @@ namespace demo_db.Services
             data.SaveChanges();
         }
 
+        public void UpdateUserRole(string username, Role newRole)
+        {
+            var user = RetrieveFullUser(username);
+            if (user == null)
+            {
+                throw new ArgumentNullException("User is null when trying to execute UpdateUserRole service");
+            }
+            else
+            {
+                user.RoleId = newRole.Id; 
+            }
+            data.Users.Update(user);
+            data.SaveChanges();
+        }
+
         public User RetrieveUser(string username)
         {
             
