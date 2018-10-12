@@ -1,4 +1,5 @@
 ﻿using demo_db.Common.Exceptions;
+using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace demo_db.core.Commands
     {
         private IUserService service;
 
-        public RegisterUserCommand(ISessionState state, IUserService service) : base(state)
+        public RegisterUserCommand(ISessionState state, IStringBuilderWrapper builder, IUserService service) : base(state,builder)
         {
             this.service = service;
         }

@@ -1,4 +1,5 @@
 ﻿using demo_db.Common.Exceptions;
+using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
@@ -11,7 +12,7 @@ namespace demo_db.core.Commands
     {
         private ICourseService service;
 
-        public AddCourseCommand(ISessionState state, ICourseService service) : base(state)
+        public AddCourseCommand(ISessionState state, IStringBuilderWrapper builder, ICourseService service) : base(state, builder)
         {
             this.service = service;
         }

@@ -1,4 +1,5 @@
 ﻿using demo_db.Common.Enum;
+using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
@@ -9,7 +10,7 @@ namespace demo_db.core.Commands
     {
         private IUserService service;
 
-        public LogInCommand(ISessionState state, IUserService service) : base(state)
+        public LogInCommand(ISessionState state, IStringBuilderWrapper builder, IUserService service) : base(state,builder)
         {
             this.service = service;
         }

@@ -1,4 +1,5 @@
 ﻿using demo_db.Common.Exceptions;
+using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 
@@ -11,7 +12,7 @@ namespace demo_db.core.Commands
         private readonly IUserService serviceUser;
         private readonly ICourseService serviceCourse;
 
-        public EnrollStudentCommand(ISessionState state, IUserService service, ICourseService course) : base(state)
+        public EnrollStudentCommand(ISessionState state, IStringBuilderWrapper builder, IUserService service, ICourseService course) : base(state,builder)
         {
             this.serviceUser = service;
             this.serviceCourse = course;

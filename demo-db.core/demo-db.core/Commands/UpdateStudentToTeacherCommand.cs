@@ -1,8 +1,7 @@
-﻿using demo_db.core.Contracts;
+﻿using demo_db.Common.Wrappers;
+using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace demo_db.core.Commands
 {
@@ -11,7 +10,7 @@ namespace demo_db.core.Commands
         private IUserService service;
         private const int teacherRoleId = 2;
 
-        public UpdateStudentToTeacherCommand(ISessionState state, IUserService service) : base(state)
+        public UpdateStudentToTeacherCommand(ISessionState state, IStringBuilderWrapper builder, IUserService service) : base(state, builder)
         {
             this.service = service;
         }

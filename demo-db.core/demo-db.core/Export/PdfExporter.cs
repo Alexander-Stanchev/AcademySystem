@@ -1,25 +1,18 @@
-﻿using demo_db.core.Contracts;
-using demo_db.Services.Abstract;
+﻿using demo_db.core.Export.Abstract;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+
 
 
 namespace demo_db.core.Export
 {
-    public class ExportToPDF
+    public class PdfExporter : IExporter
     {
-        private readonly ICourseService serviceCourse;
 
-        public ExportToPDF(ISessionState state, ICourseService service)
-        {
-            this.serviceCourse = service;
-        }
-
-        public static void GeneratePDFReport(IList<Services.ViewModels.GradeViewModel> grades, string username)
+        public void GenerateReport(IList<Services.ViewModels.GradeViewModel> grades, string username)
         {
             try
             {
@@ -65,11 +58,6 @@ namespace demo_db.core.Export
                     gradeTables[currentTable].AddCell($"{item.Assaingment.MaxPoints}");
 
                 }
-
-
-
-
-
 
                 //Set up file name and directory
                 string folderPath = ".\\PDF\\";

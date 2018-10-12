@@ -1,4 +1,5 @@
 ﻿using demo_db.Common.Exceptions;
+using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
@@ -12,7 +13,7 @@ namespace demo_db.core.Commands
         private IUserService serviceUser;
         private ICourseService serviceCourse;
 
-        public ListAvailableCoursesCommand(ISessionState state,IUserService serviceUser, ICourseService serviceCourse) : base(state)
+        public ListAvailableCoursesCommand(ISessionState state, IStringBuilderWrapper builder, IUserService serviceUser, ICourseService serviceCourse) : base(state, builder)
         {
             this.serviceUser = serviceUser;
             this.serviceCourse = serviceCourse;
@@ -37,13 +38,13 @@ namespace demo_db.core.Commands
                 }
                 else
                 {
-                    var sb = new StringBuilder();
-                    sb.AppendLine("The available courses are:");
+
+                    this.Builder.AppendLine("The available courses are:");
                     foreach (var course in courses)
                     {
-                        sb.AppendLine($"Course: {course.CourseName} with teacher: {course.Teacher.FullName}");
+                        this.Builder.AppendLine($"Course: {course.CourseName} with teacher: {course.Teacher.FullName}");
                     }
-                    return sb.ToString();
+                    return this.Builder.ToString();
                 }
 
             }
