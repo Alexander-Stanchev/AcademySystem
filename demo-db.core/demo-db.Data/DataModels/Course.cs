@@ -10,6 +10,7 @@ namespace demo_db.Data.DataModels
         public int CourseId { get; set; }
 
         [Required]
+        [MaxLength(35)]
         public string Name { get; set; }
 
         public int TeacherId { get; set; }

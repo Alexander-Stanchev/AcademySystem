@@ -22,6 +22,8 @@ namespace demo_db.Services
 
         public void AddCourse(string coursename, int teacherID, DateTime start, DateTime end)
         {
+            Validations.ValidateLength(Validations.MIN_COURSENAME, Validations.MAX_COURSENAME, coursename, $"The course name can't be less than {Validations.MIN_COURSENAME} and greater than {Validations.MAX_COURSENAME}");
+
             var course = this.RetrieveCourse(coursename);
             if (course == null)
             {
@@ -42,6 +44,10 @@ namespace demo_db.Services
 
         public void EnrollStudent(string username, string coursename)
         {
+            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            Validations.ValidateLength(Validations.MIN_COURSENAME, Validations.MAX_COURSENAME, coursename, $"The course name can't be less than {Validations.MIN_COURSENAME} and greater than {Validations.MAX_COURSENAME}");
+            Validations.VerifyUserName(username);
+
             var user = this.data.Users.All().Include(us => us.EnrolledStudents).FirstOrDefault(us => us.UserName == username);
             var course = this.data.Courses.All().FirstOrDefault(co => co.Name == coursename);
 

@@ -10,12 +10,16 @@ namespace demo_db.Data.DataModels
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(35)]
         public string UserName { get; set; }
 
         [Required]
+        [MinLength(3)]
+        [MaxLength(100)]
         public string Password { get; set; }
 
         [Required]
+        [MaxLength(40)]
         public string FullName { get; set; }
 
         public int? MentorId { get; set; }

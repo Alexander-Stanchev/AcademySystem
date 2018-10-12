@@ -10,6 +10,7 @@ namespace demo_db.Services
 {
     public class UserService : IUserService
     {
+
         private IDataHandler data;
         private IRoleService roleService;
 
@@ -21,11 +22,17 @@ namespace demo_db.Services
 
         public void AddUser(string username, string password, string fullname)
         {
+            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            Validations.ValidateLength(Validations.MIN_FULLNAME, Validations.MAX_FULLNAME, fullname, $"The full name provided can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            Validations.VerifyUserName(username);
+
             var user = RetrieveUser(username);
+
             if(user != null)
             {
                 throw new UserAlreadyExistsException("User already exists");
             }
+
             user = new User
             {
                 UserName = username,
@@ -51,6 +58,9 @@ namespace demo_db.Services
 
         private User RetrieveFullUser(string username)
         {
+            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            Validations.VerifyUserName(username);
+
             var user = this.data.Users.All()
                .Include(u => u.Role)
                .Include(u => u.Grades)
@@ -62,6 +72,16 @@ namespace demo_db.Services
 
         public void EnrollCourse(User user, Course course)
         {
+            if (user == null)
+            {
+                throw new UserDoesntExistsException("Can't enroll course. User is null.");
+            }
+
+            if (course == null)
+            {
+                throw new ArgumentNullException("Can't enroll course. Course is null.");
+            }
+
             if (user.EnrolledStudents.FirstOrDefault(e => e.CourseId == course.CourseId) == null)
             {
                 var enroll = new EnrolledStudent
@@ -84,6 +104,9 @@ namespace demo_db.Services
 
         public int LoginUser(string username, string password)
         {
+            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            Validations.VerifyUserName(username);
+
             var user = this.RetrieveUser(username);
             if (user == null)
             {
@@ -96,9 +119,17 @@ namespace demo_db.Services
             return user.RoleId;
         }
 
-        public void UpdateRole(string userName, string newRoleString)
+        public void UpdateRole(string username, string newRoleString)
         {
-            var user = RetrieveFullUser(userName);
+            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            Validations.VerifyUserName(username);
+
+            if (newRoleString == "Admin")
+            {
+                throw new InvalidOperationException("You are not allowed to set someone's role to Adminitrator");
+            }
+
+            var user = RetrieveFullUser(username);
             var role = new Role();
 
             if (user == null)
