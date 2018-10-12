@@ -6,11 +6,12 @@ using System.Text;
 
 namespace demo_db.core.Commands
 {
-    class UpdateUserRoleCommand : CommandAbstract, ICommand
+    class UpdateStudentToTeacherCommand : CommandAbstract
     {
         private IUserService service;
+        private const int teacherRoleId = 2;
 
-        public UpdateUserRoleCommand(ISessionState state, IUserService service) : base(state)
+        public UpdateStudentToTeacherCommand(ISessionState state, IUserService service) : base(state)
         {
             this.service = service;
         }
@@ -28,9 +29,7 @@ namespace demo_db.core.Commands
             }
 
             string userName = parameters[0];
-            string newRoleString = parameters[1];
-
-            this.service.UpdateRole(userName, newRoleString);
+            this.service.UpdateRole(userName, teacherRoleId);
 
             return $"User {userName} role is updated.";
         }

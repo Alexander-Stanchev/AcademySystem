@@ -2,9 +2,8 @@
 using demo_db.Data.Repositories.Contracts;
 using demo_db.Services.Abstract;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
 
 namespace demo_db.Services
 {

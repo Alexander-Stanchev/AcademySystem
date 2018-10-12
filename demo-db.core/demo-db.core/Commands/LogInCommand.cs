@@ -5,7 +5,7 @@ using System;
 
 namespace demo_db.core.Commands
 {
-    public class LogInCommand : CommandAbstract, ICommand
+    public class LogInCommand : CommandAbstract
     {
         private IUserService service;
 

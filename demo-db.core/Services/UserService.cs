@@ -119,18 +119,17 @@ namespace demo_db.Services
             return user.RoleId;
         }
 
-        public void UpdateRole(string username, string newRoleString)
+        public void UpdateRole(string username, int newRoleString)
         {
             Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
             Validations.VerifyUserName(username);
 
-            if (newRoleString == "Admin")
+            if (newRoleString == 1)
             {
                 throw new InvalidOperationException("You are not allowed to set someone's role to Adminitrator");
             }
 
             var user = RetrieveFullUser(username);
-            var role = new Role();
 
             if (user == null)
             {
@@ -138,11 +137,10 @@ namespace demo_db.Services
             }
             else
             {
-                role = this.roleService.RetrieveRole(newRoleString);
-                user.RoleId = role.Id;
+                user.RoleId = newRoleString;
             }
 
-            data.Users.Update(user);
+            //data.Users.Update(user);
             data.SaveChanges();
         }
     }

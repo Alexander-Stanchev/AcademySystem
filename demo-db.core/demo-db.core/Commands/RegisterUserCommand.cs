@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace demo_db.core.Commands
 {
-    public class RegisterUserCommand : CommandAbstract, ICommand
+    public class RegisterUserCommand : CommandAbstract
     {
         private IUserService service;
 

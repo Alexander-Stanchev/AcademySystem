@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace demo_db.Services
@@ -26,7 +24,7 @@ namespace demo_db.Services
 
         public static void VerifyUserName(string username)
         {
-            Regex regex = new Regex(@"^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$");
+            Regex regex = new Regex(@"^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$");
             Match match = regex.Match(username);
             if (!match.Success)
             {
