@@ -17,7 +17,6 @@ namespace demo_db.core
             var container = builder.Build();
 
             var engine = container.Resolve<IEngine>();
-            Export.ExportToPDF.GeneratePDFReport();
             engine.Run();
         }
     }

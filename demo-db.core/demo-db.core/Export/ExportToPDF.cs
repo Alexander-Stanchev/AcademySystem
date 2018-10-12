@@ -1,4 +1,6 @@
-﻿using iTextSharp.text;
+﻿using demo_db.core.Contracts;
+using demo_db.Services.Abstract;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
@@ -10,13 +12,19 @@ namespace demo_db.core.Export
 {
     public class ExportToPDF
     {
-        public static void GeneratePDFReport()
+        private readonly ICourseService serviceCourse;
+
+        public ExportToPDF(ISessionState state, ICourseService service)
+        {
+            this.serviceCourse = service;
+        }
+
+        public static void GeneratePDFReport(IList<Services.ViewModels.GradeViewModel> grades, string username)
         {
             try
-            {                
+            {
                 PdfPTable footer = new PdfPTable(1);
                 PdfPTable name = new PdfPTable(1);
-                PdfPTable table = new PdfPTable(3);
                 var boldFont = FontFactory.GetFont(FontFactory.TIMES_BOLD, 16);
 
                 //Top of the page
@@ -25,35 +33,43 @@ namespace demo_db.core.Export
                 footer.DefaultCell.Border = 0;
                 footer.AddCell(new Phrase(c1));
 
-                //Change pesho goshev with current username -> fullname
-                Chunk studentName = new Chunk("Pesho Goshev", boldFont);
+                Chunk studentName = new Chunk(username, boldFont);
                 name.DefaultCell.HorizontalAlignment = Element.ALIGN_CENTER;
                 name.DefaultCell.Border = 0;
                 name.AddCell(new Phrase(studentName));
-                //Not changeable
-                PdfPCell courses = new PdfPCell(new Phrase("Courses", boldFont));
-                PdfPCell assignments = new PdfPCell(new Phrase("Assignments", boldFont));
-                PdfPCell gradesCell = new PdfPCell(new Phrase("Grades", boldFont));
 
-                //Main table - Left column -> courses - right column -> nested tables
-                table.TotalWidth = 400f;
-                table.LockedWidth = true;
-                table.AddCell(courses);
-                table.AddCell(assignments);
-                table.AddCell(gradesCell);
-                table.AddCell("DSA");
+                string currentCourse = null;
+                var gradeTables = new List<PdfPTable>();
+                var currentTable = 0;
+                foreach (var item in grades)
+                {
+                    if (item.Assaingment.Course.CourseName != currentCourse)
+                    {
 
-                //Nested table with Assaignments and Grades
-                PdfPTable nestedTable = new PdfPTable(1);
-                PdfPCell nestedCell1 = new PdfPCell(nestedTable);
-                nestedCell1.Padding = 0f;
-                nestedTable.AddCell(new Phrase("Linear"));
-                nestedTable.AddCell(new Phrase("2"));
-                table.AddCell(nestedCell1);
-                
-                nestedTable.AddCell(new Phrase("Tree"));
-                nestedTable.AddCell(new Phrase("32"));
-                table.AddCell(nestedCell1);
+                        currentCourse = item.Assaingment.Course.CourseName;
+                        gradeTables.Add(new PdfPTable(3));
+                        currentTable = gradeTables.Count - 1;
+                        PdfPCell headercell = new PdfPCell(new Phrase($"Grades for the course: {currentCourse}", boldFont));
+                        headercell.Colspan = 3;
+                        headercell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        gradeTables[currentTable].AddCell(headercell);
+                        gradeTables[currentTable].AddCell("Assaignment Name");
+                        gradeTables[currentTable].AddCell("Your Score");
+                        gradeTables[currentTable].AddCell("Max Score");
+
+
+                    }
+
+                    gradeTables[currentTable].AddCell($"{item.Assaingment.Name}");
+                    gradeTables[currentTable].AddCell($"{item.Score}");
+                    gradeTables[currentTable].AddCell($"{item.Assaingment.MaxPoints}");
+
+                }
+
+
+
+
+
 
                 //Set up file name and directory
                 string folderPath = ".\\PDF\\";
@@ -75,7 +91,11 @@ namespace demo_db.core.Export
                     pdfDoc.Open();
                     pdfDoc.Add(footer);
                     pdfDoc.Add(name);
-                    pdfDoc.Add(table);
+                    foreach (var table in gradeTables)
+                    {
+                        table.SpacingBefore = 20;
+                        pdfDoc.Add(table);
+                    }
                     pdfDoc.NewPage();
 
                     pdfDoc.Close();
