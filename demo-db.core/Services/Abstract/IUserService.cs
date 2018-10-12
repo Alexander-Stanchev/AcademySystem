@@ -14,6 +14,6 @@ namespace demo_db.Services.Abstract
         void UpdateRole(string userName, int newRoleString);
         User RetrieveUser(string username);
         IList<UserViewModel> RetrieveUsers(int roleId);
-
+        void EvaluateStudent(string username, int assignmentId, int grade, string teacherUsername);
     }
 }

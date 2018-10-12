@@ -140,6 +140,7 @@ namespace demo_db.Services
             //data.Users.Update(user);
             data.SaveChanges();
         }
+
         public IList<UserViewModel> RetrieveUsers(int roleId)
         {
             var users = this.data.Users.All().Where(us => us.RoleId == roleId).ToList();
@@ -151,6 +152,47 @@ namespace demo_db.Services
                 returnValues.Add(new UserViewModel { FullName = user.FullName, Username = user.UserName });
             }
             return returnValues;
+        }
+
+        public void EvaluateStudent(string username, int assignmentId, int grade, string teacherUsername)
+        {
+            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            //Validations.ValidateLength(Validations.MIN_ASS, Validations.MAX_ASS, assignment, $"The course name can't be less than {Validations.MIN_COURSENAME} and greater than {Validations.MAX_COURSENAME}");
+            Validations.VerifyUserName(username);
+
+            var teacher = this.data.Users.All().Include(us => us.TaughtCourses).FirstOrDefault(us => us.UserName == teacherUsername);
+            var student = this.data.Users.All().Include(us => us.EnrolledStudents).Include(us => us.Grades).FirstOrDefault(us => us.UserName == username);
+            var assaignment = this.data.Assaignments.All().Include(c => c.Course).FirstOrDefault(a => a.Id == assignmentId);
+
+            if (assaignment == null)
+            {
+                throw new ArgumentNullException("Unfortunately there is no such an assignment");
+            }
+            
+            if (assaignment.Course.TeacherId != teacher.Id)
+            {
+                throw new ArgumentException($"Teacher {teacher.UserName} is not assigned to {assaignment.Name}.");
+            }
+
+            if (!student.EnrolledStudents.Any(c => c.CourseId == assaignment.CourseId))
+            {
+                throw new ArgumentException($"Student {student.UserName} is not assigned to {assaignment.Name}.");
+            }
+
+            if (student.Grades.Any(g => g.AssaignmentId == assaignment.Id))
+            {
+                throw new ArgumentException("Student already received grade for this assignment.");
+            }
+
+            var newGrade = new Grade
+            {
+                    AssaignmentId = assaignment.Id,
+                    StudentId = student.Id,
+                    ReceivedGrade = grade
+            };
+
+            student.Grades.Add(newGrade);
+                this.data.SaveChanges();
         }
     }
 }

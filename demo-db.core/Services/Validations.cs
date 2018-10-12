@@ -11,6 +11,8 @@ namespace demo_db.Services
         public const int MAX_FULLNAME = 40;
         public const int MIN_COURSENAME = 3;
         public const int MAX_COURSENAME = 50;
+        public const int MIN_ASS = 3;
+        public const int MAX_ASS = 50;
 
 
 
