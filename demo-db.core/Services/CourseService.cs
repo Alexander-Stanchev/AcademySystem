@@ -126,13 +126,19 @@ namespace demo_db.Services
 
             foreach (var grade in user.Grades)
             {
-                if(grade.Assaignment.Course.Name == coursename)
+                if (coursename == "")
                 {
-                    gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Course = new CourseViewModel { CourseName = grade.Assaignment.Course.Name}, Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
+                    gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Course = new CourseViewModel { CourseName = grade.Assaignment.Course.Name }, Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
                 }
-                
+                else if (grade.Assaignment.Course.Name == coursename)
+                {
+                    gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Course = new CourseViewModel { CourseName = grade.Assaignment.Course.Name }, Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
+                }
+
+
             }
             return gradesMapped;
+
         }
         private Course RetrieveCourse(string coursename)
         {

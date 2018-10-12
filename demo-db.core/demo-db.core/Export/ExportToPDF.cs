@@ -25,7 +25,6 @@ namespace demo_db.core.Export
             {
                 PdfPTable footer = new PdfPTable(1);
                 PdfPTable name = new PdfPTable(1);
-                PdfPTable table = new PdfPTable(2);
                 var boldFont = FontFactory.GetFont(FontFactory.TIMES_BOLD, 16);
 
                 //Top of the page
@@ -33,38 +32,43 @@ namespace demo_db.core.Export
                 footer.DefaultCell.HorizontalAlignment = Element.ALIGN_CENTER;
                 footer.DefaultCell.Border = 0;
                 footer.AddCell(new Phrase(c1));
-                
+
                 Chunk studentName = new Chunk(username, boldFont);
                 name.DefaultCell.HorizontalAlignment = Element.ALIGN_CENTER;
                 name.DefaultCell.Border = 0;
                 name.AddCell(new Phrase(studentName));
-                //Not changeable
-                PdfPCell courses = new PdfPCell(new Phrase("Courses", boldFont));
-                PdfPCell assignments = new PdfPCell(new Phrase("Assignments/Grades", boldFont));
 
+                string currentCourse = null;
+                var gradeTables = new List<PdfPTable>();
+                var currentTable = 0;
                 foreach (var item in grades)
                 {
+                    if (item.Assaingment.Course.CourseName != currentCourse)
+                    {
+
+                        currentCourse = item.Assaingment.Course.CourseName;
+                        gradeTables.Add(new PdfPTable(3));
+                        currentTable = gradeTables.Count - 1;
+                        PdfPCell headercell = new PdfPCell(new Phrase($"Grades for the course: {currentCourse}", boldFont));
+                        headercell.Colspan = 3;
+                        headercell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        gradeTables[currentTable].AddCell(headercell);
+                        gradeTables[currentTable].AddCell("Assaignment Name");
+                        gradeTables[currentTable].AddCell("Your Score");
+                        gradeTables[currentTable].AddCell("Max Score");
+
+
+                    }
+
+                    gradeTables[currentTable].AddCell($"{item.Assaingment.Name}");
+                    gradeTables[currentTable].AddCell($"{item.Score}");
+                    gradeTables[currentTable].AddCell($"{item.Assaingment.MaxPoints}");
 
                 }
-                //Main table - Left column -> courses - right column -> nested tables
-                table.TotalWidth = 400f;
-                table.LockedWidth = true;
-                table.AddCell(courses);
-                table.AddCell(assignments);                
-                table.AddCell("DSA");
 
-                //Nested table with Assaignments and Grades
-                PdfPTable nestedTable = new PdfPTable(2);
-                nestedTable.DefaultCell.Border = 0;
-                nestedTable.AddCell(new Phrase("Linear"));                
-                nestedTable.AddCell(new Phrase("2"));
-                table.AddCell(nestedTable);                
-                nestedTable.DeleteBodyRows();
-                table.AddCell("");
-                nestedTable.AddCell(new Phrase("Tree"));
-                nestedTable.AddCell(new Phrase("32"));
-                table.AddCell(nestedTable);
-                table.AddCell("");
+
+
+
 
 
                 //Set up file name and directory
@@ -87,7 +91,11 @@ namespace demo_db.core.Export
                     pdfDoc.Open();
                     pdfDoc.Add(footer);
                     pdfDoc.Add(name);
-                    pdfDoc.Add(table);
+                    foreach (var table in gradeTables)
+                    {
+                        table.SpacingBefore = 20;
+                        pdfDoc.Add(table);
+                    }
                     pdfDoc.NewPage();
 
                     pdfDoc.Close();

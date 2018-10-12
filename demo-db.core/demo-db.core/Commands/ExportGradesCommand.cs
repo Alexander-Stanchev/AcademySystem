@@ -29,8 +29,8 @@ namespace demo_db.core.Commands
             }
             else
             {
-                var grades = this.serviceCourse.RetrieveGrades(this.State.UserName);                
-                
+                var grades = this.serviceCourse.RetrieveGrades(this.State.UserName);
+
                 ExportToPDF.GeneratePDFReport(grades, this.State.UserName);
                 return "Created PDF Report";
             }
