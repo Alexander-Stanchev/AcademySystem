@@ -1,10 +1,8 @@
 ﻿using demo_db.Data.Context;
 using demo_db.Data.DataModels;
 using demo_db.Data.Repositories.Contracts;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
 
 namespace demo_db.Data.Repositories
 {

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo-db.Data", "demo-db.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo-db.Services", "Services\demo-db.Services.csproj", "{28A55FB8-BA7C-4030-8CB3-561B95B3324F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo-db.Common", "demo-db.Common\demo-db.Common.csproj", "{EDA0024D-19C3-4F06-847F-349318AF50DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo-db.Common", "demo-db.Common\demo-db.Common.csproj", "{EDA0024D-19C3-4F06-847F-349318AF50DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo-db.Tests", "demo-db.Tests\demo-db.Tests.csproj", "{00CF3768-35E1-4FA9-87F0-229C4893A911}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EDA0024D-19C3-4F06-847F-349318AF50DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDA0024D-19C3-4F06-847F-349318AF50DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDA0024D-19C3-4F06-847F-349318AF50DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00CF3768-35E1-4FA9-87F0-229C4893A911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00CF3768-35E1-4FA9-87F0-229C4893A911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00CF3768-35E1-4FA9-87F0-229C4893A911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00CF3768-35E1-4FA9-87F0-229C4893A911}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

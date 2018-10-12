@@ -14,12 +14,10 @@ namespace demo_db.Services
     {
 
         private IDataHandler data;
-        private IRoleService roleService;
 
-        public UserService(IDataHandler context, IRoleService roleService)
+        public UserService(IDataHandler context)
         {
             this.data = context ?? throw new ArgumentNullException(nameof(context));
-            this.roleService = roleService;
         }
 
         public void AddUser(string username, string password, string fullname)

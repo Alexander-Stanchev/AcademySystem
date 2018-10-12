@@ -7,6 +7,15 @@ namespace demo_db.Data.Context
 {
     public class AcademyContext : DbContext, IAcademyContext
     {
+        public AcademyContext()
+        {
+
+        }
+
+        public AcademyContext(DbContextOptions<AcademyContext> options) : base(options)
+        {
+
+        }
 
         public DbSet<User> Users { get; set; }
 
