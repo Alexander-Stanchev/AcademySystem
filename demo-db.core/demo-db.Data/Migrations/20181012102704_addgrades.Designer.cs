@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using demo_db.Data.Context;
 
 namespace demo_db.Data.Migrations
 {
     [DbContext(typeof(AcademyContext))]
-    partial class AcademyContextModelSnapshot : ModelSnapshot
+    [Migration("20181012102704_addgrades")]
+    partial class addgrades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +109,7 @@ namespace demo_db.Data.Migrations
                     b.ToTable("Grades");
 
                     b.HasData(
-                        new { AssaignmentId = 1, StudentId = 8, ReceivedGrade = 53.0 },
-                        new { AssaignmentId = 2, StudentId = 8, ReceivedGrade = 28.0 },
-                        new { AssaignmentId = 3, StudentId = 8, ReceivedGrade = 74.0 }
+                        new { AssaignmentId = 1, StudentId = 8, ReceivedGrade = 53.0 }
                     );
                 });
 

@@ -1,0 +1,17 @@
+[
+  {
+    "AssaignmentId": "1",
+    "StudentId": "8",
+    "ReceivedGrade": "53"
+  },
+  {
+    "AssaignmentId": "2",
+    "StudentId": "8",
+    "ReceivedGrade": "28"
+  },
+  {
+    "AssaignmentId": "3",
+    "StudentId": "8",
+    "ReceivedGrade": "74"
+  }
+]
