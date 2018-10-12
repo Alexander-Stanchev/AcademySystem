@@ -1,4 +1,5 @@
 ﻿using demo_db.Data.DataModels;
+using demo_db.Services.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,7 @@ namespace demo_db.Services.Abstract
         int LoginUser(string username, string password);
         void UpdateRole(string userName, int newRoleString);
         User RetrieveUser(string username);
-
+        IList<UserViewModel> RetrieveUsers(int roleId);
 
     }
 }

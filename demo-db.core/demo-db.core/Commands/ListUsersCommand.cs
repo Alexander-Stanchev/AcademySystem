@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using demo_db.Common.Exceptions;
+using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 
@@ -11,7 +12,7 @@ namespace demo_db.core.Commands
     {
         private readonly IUserService serviceUser;
 
-        public ListUsersCommand(ISessionState state, IUserService serviceUser) : base(state)
+        public ListUsersCommand(ISessionState state, IStringBuilderWrapper builder, IUserService serviceUser) : base(state, builder)
         {
             this.serviceUser = serviceUser;
         }
@@ -28,10 +29,22 @@ namespace demo_db.core.Commands
             }
             else
             {
-                //var users = this.serviceUser.RetrieveUser();
-                return "";
+                var roleId = int.Parse(parameters[0]);
+                var users = this.serviceUser.RetrieveUsers(roleId);
+                if (users.Count == 0)
+                {
+                    return "There are no users.";
+                }
+                else
+                {
+                    this.Builder.AppendLine("The registered users are:");
+                    foreach (var user in users)
+                    {
+                        this.Builder.AppendLine($"User {user.FullName} with username {user.Username}");
+                    }
+                    return this.Builder.ToString();
+                }                
             }
-
         }
     }
 }

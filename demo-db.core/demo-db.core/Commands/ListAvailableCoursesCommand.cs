@@ -38,7 +38,6 @@ namespace demo_db.core.Commands
                 }
                 else
                 {
-
                     this.Builder.AppendLine("The available courses are:");
                     foreach (var course in courses)
                     {
@@ -46,7 +45,6 @@ namespace demo_db.core.Commands
                     }
                     return this.Builder.ToString();
                 }
-
             }
         }
     }

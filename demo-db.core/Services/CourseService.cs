@@ -80,7 +80,7 @@ namespace demo_db.Services
 
         }
 
-        public IList<CourseViewModel> RetrieveCourseNames(int roleId ,string username = "")
+        public IList<CourseViewModel> RetrieveCourseNames(int roleId, string username = "")
         {
             var user = this.data.Users.All().FirstOrDefault(us => us.UserName == username);
             var userId = user.Id;

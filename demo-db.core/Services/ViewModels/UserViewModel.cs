@@ -9,6 +9,7 @@ namespace demo_db.Services.ViewModels
         public int Id { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
+        public string Username { get; set; }
         public int? MentorId { get; set; }
         public UserViewModel Mentor { get; set; }
         public int RoleId { get; set; }

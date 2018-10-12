@@ -5,6 +5,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using demo_db.Data.Repositories.Contracts;
 using demo_db.Common.Exceptions;
+using demo_db.Services.ViewModels;
+using System.Collections.Generic;
 
 namespace demo_db.Services
 {
@@ -28,7 +30,7 @@ namespace demo_db.Services
 
             var user = RetrieveUser(username);
 
-            if(user != null)
+            if (user != null)
             {
                 throw new UserAlreadyExistsException("User already exists");
             }
@@ -47,7 +49,7 @@ namespace demo_db.Services
         }
 
         public User RetrieveUser(string username)
-        {            
+        {
             var user = this.data.Users.All()
                 .Include(u => u.Role)
                 .FirstOrDefault(u => u.UserName == username);
@@ -88,16 +90,13 @@ namespace demo_db.Services
                     StudentId = user.Id,
                     CourseId = course.CourseId
                 };
-                
+
                 user.EnrolledStudents.Add(enroll);
                 this.data.SaveChanges();
-
             }
             else
             {
-                {
-                    throw new Exception();
-                }
+                throw new Exception();
             }
         }
 
@@ -111,7 +110,7 @@ namespace demo_db.Services
             {
                 throw new UserDoesntExistsException("User doesn't exists.");
             }
-            else if(user.Password != password)
+            else if (user.Password != password)
             {
                 throw new InvalidPasswordException("Invalid password");
             }
@@ -138,9 +137,20 @@ namespace demo_db.Services
             {
                 user.RoleId = newRoleString;
             }
-
             //data.Users.Update(user);
             data.SaveChanges();
+        }
+        public IList<UserViewModel> RetrieveUsers(int roleId)
+        {
+            var users = this.data.Users.All().Where(us => us.RoleId == roleId).ToList();
+
+            IList<UserViewModel> returnValues = new List<UserViewModel>();
+
+            foreach (var user in users)
+            {
+                returnValues.Add(new UserViewModel { FullName = user.FullName, Username = user.UserName });
+            }
+            return returnValues;
         }
     }
 }
