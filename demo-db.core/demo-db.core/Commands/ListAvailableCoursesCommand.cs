@@ -24,13 +24,13 @@ namespace demo_db.core.Commands
             {
                 throw new UserNotLoggedException("Please log before using commands");
             }
-            else if (this.State.RoleId != 3)
+            else if (this.State.RoleId == 1)
             {
-                throw new IncorrectPermissionsException("This command is available only to users with role Student");
+                throw new IncorrectPermissionsException("This command is available only to users with role Student or Teacher");
             }
             else
             {
-                var courses = this.serviceCourse.RetrieveCourseNames(this.State.UserName);
+                var courses = this.serviceCourse.RetrieveCourseNames(this.State.RoleId , this.State.UserName);
                 if (courses.Count == 0)
                 {
                     return "There are no available courses at this moment!";

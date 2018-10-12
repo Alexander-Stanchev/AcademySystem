@@ -80,14 +80,28 @@ namespace demo_db.Services
 
         }
 
-        public IList<CourseViewModel> RetrieveCourseNames(string username = "")
+        public IList<CourseViewModel> RetrieveCourseNames(int roleId ,string username = "")
         {
             var user = this.data.Users.All().FirstOrDefault(us => us.UserName == username);
             var userId = user.Id;
-            var courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
-                .Include(co => co.Teacher)
-                .Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
-                .ToList();
+
+            var courses = new List<Course>();
+
+            if (roleId == 3)
+            {
+                courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
+                    .Include(co => co.Teacher)
+                    .Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
+                    .ToList();
+            }
+            else if (roleId == 2)
+            {
+                   courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
+                    .Include(co => co.Teacher)
+                    .Where(c => c.TeacherId == user.Id)
+                    //.Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
+                    .ToList();
+            }
 
             IList<CourseViewModel> returnValues = new List<CourseViewModel>();
 
