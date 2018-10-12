@@ -12,6 +12,7 @@ namespace demo_db.Services.Abstract
         int LoginUser(string username, string password);
         void UpdateRole(string userName, int newRoleString);
         User RetrieveUser(string username);
+        void EvaluateStudent(string username, int assignmentId, int grade, string teacherUsername);
 
 
     }

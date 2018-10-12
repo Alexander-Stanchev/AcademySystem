@@ -9,12 +9,10 @@ namespace demo_db.core.Commands
 {
     public class ListAvailableCoursesCommand : CommandAbstract
     {
-        private IUserService serviceUser;
         private ICourseService serviceCourse;
 
-        public ListAvailableCoursesCommand(ISessionState state,IUserService serviceUser, ICourseService serviceCourse) : base(state)
+        public ListAvailableCoursesCommand(ISessionState state, ICourseService serviceCourse) : base(state)
         {
-            this.serviceUser = serviceUser;
             this.serviceCourse = serviceCourse;
         }
 
