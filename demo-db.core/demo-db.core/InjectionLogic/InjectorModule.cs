@@ -8,6 +8,9 @@ using demo_db.Services;
 using demo_db.Services.Abstract;
 using demo_db.Data.Repositories;
 using demo_db.Data.Repositories.Contracts;
+using demo_db.core.Export;
+using demo_db.core.Export.Abstract;
+using demo_db.Common.Wrappers;
 
 namespace demo_db.core.InjectionLogic
 {
@@ -29,6 +32,8 @@ namespace demo_db.core.InjectionLogic
             builder.RegisterType<CommandParser>().As<IParser>().SingleInstance();
             builder.RegisterType<CommandProcessor>().As<IProcessor>().SingleInstance();
             builder.RegisterType<SessionState>().As<ISessionState>().SingleInstance();
+            builder.RegisterType<PdfExporter>().As<IExporter>().SingleInstance();
+            builder.RegisterType<StringBuilderWrapper>().As<IStringBuilderWrapper>();
             builder.RegisterType<AcademyContext>().As<IAcademyContext>();
             builder.RegisterType<DataHandler>().As<IDataHandler>();
 

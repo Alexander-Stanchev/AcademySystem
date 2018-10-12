@@ -27,7 +27,6 @@ namespace demo_db.Data.Context
                 optionsBuilder.
                     UseSqlServer("Server=localhost;Database=Academy;Trusted_Connection=True;");
             }
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,12 +35,14 @@ namespace demo_db.Data.Context
             if (File.Exists("../demo-db.Data/Files/roles.json") &&
                 File.Exists("../demo-db.Data/Files/users.json") &&
                 File.Exists("../demo-db.Data/Files/courses.json") &&
-                File.Exists("../demo-db.Data/Files/assignments.json"))
+                File.Exists("../demo-db.Data/Files/assignments.json") &&
+                File.Exists("../demo-db.Data/Files/grades.json"))
             {
                 var roles = JsonConvert.DeserializeObject<Role[]>(File.ReadAllText("../demo-db.Data/Files/roles.json"));
                 var users = JsonConvert.DeserializeObject<User[]>(File.ReadAllText("../demo-db.Data/Files/users.json"));
                 var courses = JsonConvert.DeserializeObject<Course[]>(File.ReadAllText("../demo-db.Data/Files/courses.json"));
                 var assignments = JsonConvert.DeserializeObject<Assaignment[]>(File.ReadAllText("../demo-db.Data/Files/assignments.json"));
+                var grades = JsonConvert.DeserializeObject<Grade[]>(File.ReadAllText("../demo-db.Data/Files/grades.json"));
 
                 modelBuilder.Entity<Role>().HasData(roles);
                 modelBuilder.Entity<User>().HasData(users);
@@ -49,6 +50,7 @@ namespace demo_db.Data.Context
                 modelBuilder.Entity<Course>().HasData(courses);
                 modelBuilder.Entity<Assaignment>().HasData(assignments);
 
+                modelBuilder.Entity<Grade>().HasData(grades);
             }
 
             modelBuilder.Entity<EnrolledStudent>()

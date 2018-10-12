@@ -1,4 +1,6 @@
-﻿using demo_db.core.Contracts;
+﻿using demo_db.Common.Exceptions;
+using demo_db.Common.Wrappers;
+using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ namespace demo_db.core.Commands
     {
         private ICourseService service;
 
-        public AddCourseCommand(ISessionState state, ICourseService service) : base(state)
+        public AddCourseCommand(ISessionState state, IStringBuilderWrapper builder, ICourseService service) : base(state, builder)
         {
             this.service = service;
         }
@@ -18,7 +20,11 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                return "You will need to login first";
+                throw new UserNotLoggedException("You will need to login first");
+            }
+            else if (this.State.RoleId != 2)
+            {
+                throw new IncorrectPermissionsException("This command is available only to users with role Teacher");
             }
             else
             {
