@@ -10,6 +10,7 @@ namespace demo_db.Services.Abstract
         void AddUser(string username, string password, string fullname);
         void EnrollCourse(User user, Course course);
         int LoginUser(string username, string password);
+        void UpdateRole(string userName, string newRoleString);
 
     }
 }

@@ -10,11 +10,13 @@ namespace demo_db.Data.Repositories
         private IAssaignmentRepositoryEF assaignments;
         private ICourseRepositoryEF courses;
         private IUserRepositoryEF users;
+        private IRoleRepositoryEF roles;
 
         public DataHandler(IAcademyContext context)
         {
             this.context = context;
         }
+
         public IAssaignmentRepositoryEF Assaignments
         {
             get
@@ -74,6 +76,26 @@ namespace demo_db.Data.Repositories
             set
             {
                 this.users = value;
+            }
+        }
+
+        public IRoleRepositoryEF Roles
+        {
+            get
+            {
+                if (this.roles == null)
+                {
+                    this.roles = new RoleRepositoryEF(context);
+                    return this.roles;
+                }
+                else
+                {
+                    return this.roles;
+                }
+            }
+            set
+            {
+                this.roles = value;
             }
         }
 

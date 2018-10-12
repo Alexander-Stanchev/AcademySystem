@@ -21,8 +21,9 @@ namespace demo_db.core.Core
             {
                 return scope.ResolveNamed<ICommand>(commandName.ToLower());
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return null;
             }
 

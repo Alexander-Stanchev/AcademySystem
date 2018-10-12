@@ -11,10 +11,12 @@ namespace demo_db.Services
     public class UserService : IUserService
     {
         private IDataHandler data;
+        private IRoleService roleService;
 
-        public UserService(IDataHandler context)
+        public UserService(IDataHandler context, IRoleService roleService)
         {
             this.data = context ?? throw new ArgumentNullException(nameof(context));
+            this.roleService = roleService;
         }
 
         public void AddUser(string username, string password, string fullname)
@@ -92,6 +94,25 @@ namespace demo_db.Services
                 throw new InvalidPasswordException("Invalid password");
             }
             return user.RoleId;
+        }
+
+        public void UpdateRole(string userName, string newRoleString)
+        {
+            var user = RetrieveFullUser(userName);
+            var role = new Role();
+
+            if (user == null)
+            {
+                throw new ArgumentNullException("User doesn't exist");
+            }
+            else
+            {
+                role = this.roleService.RetrieveRole(newRoleString);
+                user.RoleId = role.Id;
+            }
+
+            data.Users.Update(user);
+            data.SaveChanges();
         }
     }
 }

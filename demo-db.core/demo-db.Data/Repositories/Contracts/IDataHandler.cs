@@ -12,6 +12,8 @@ namespace demo_db.Data.Repositories.Contracts
 
         IUserRepositoryEF Users { get; }
 
+        IRoleRepositoryEF Roles { get; }
+
         int SaveChanges();
 
     }

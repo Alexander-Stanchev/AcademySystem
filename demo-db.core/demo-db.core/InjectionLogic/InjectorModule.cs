@@ -37,6 +37,8 @@ namespace demo_db.core.InjectionLogic
         {
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<CourseService>().As<ICourseService>();
+            builder.RegisterType<RoleService>().As<IRoleService>();
+
         }
         private void RegisterCommands(ContainerBuilder builder)
         {
