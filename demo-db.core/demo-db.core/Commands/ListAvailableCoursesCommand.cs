@@ -11,7 +11,7 @@ namespace demo_db.core.Commands
     {
         private ICourseService serviceCourse;
 
-        public ListAvailableCoursesCommand(ISessionState state, ICourseService serviceCourse) : base(state)
+        public ListAvailableCoursesCommand(ISessionState state, IStringBuilderWraper builder, ICourseService serviceCourse) : base(state, builder)
         {
             this.serviceCourse = serviceCourse;
         }
