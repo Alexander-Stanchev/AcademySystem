@@ -46,7 +46,7 @@ namespace demo_db.Services
             data.SaveChanges();
         }
 
-        private User RetrieveUser(string username)
+        public User RetrieveUser(string username)
         {
             
             var user = this.data.Users.All()

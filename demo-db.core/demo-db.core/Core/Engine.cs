@@ -50,6 +50,11 @@ namespace demo_db.core.Core
                 this.Writer.WriteLine("For changing the role of existing user use the following command: UpdateUserRole {username} {newRole}");
             }
 
+            if ((RoleEnum)(this.State.RoleId - 1) == RoleEnum.Teacher)
+            {
+                this.Writer.WriteLine("For adding new course: AddCourse {courseName} {mm-dd-yy} {mm-dd-yy}");
+            }
+
             while (true)
             {
                 var command = this.Reader.ReadLine();
