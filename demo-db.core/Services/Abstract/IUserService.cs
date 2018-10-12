@@ -13,5 +13,6 @@ namespace demo_db.Services.Abstract
         void UpdateRole(string userName, int newRoleString);
         User RetrieveUser(string username);
 
+
     }
 }

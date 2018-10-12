@@ -10,6 +10,7 @@ namespace demo_db.Services.Abstract
         void AddCourse(string coursename, string userName, DateTime start, DateTime end);
         void EnrollStudent(string username, string coursename);
         IList<CourseViewModel> RetrieveCourseNames(string username = "");
-        IList<GradeViewModel> RetrieveGrades(string username, string coursename);
+        IList<GradeViewModel> RetrieveGrades(string username, string coursename = "");
+
     }
 }

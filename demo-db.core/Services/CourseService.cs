@@ -79,6 +79,7 @@ namespace demo_db.Services
             }
 
         }
+
         public IList<CourseViewModel> RetrieveCourseNames(string username = "")
         {
             var user = this.data.Users.All().FirstOrDefault(us => us.UserName == username);
@@ -96,13 +97,25 @@ namespace demo_db.Services
             }
             return returnValues;
         }
-        public IList<GradeViewModel> RetrieveGrades(string username, string coursename)
+        public IList<GradeViewModel> RetrieveGrades(string username, string coursename = "")
         {
-            var user = this.data.Users.All()
-                .Include(us => us.Grades)
-                    .ThenInclude(gr => gr.Assaignment)
-                        .ThenInclude(a => a.Course)
-                .FirstOrDefault(us => us.UserName == username && us.EnrolledStudents.Any(es => es.Course.Name == coursename));
+            var user = new User();
+            if (coursename != "")
+            {
+                user = this.data.Users.All()
+                    .Include(us => us.Grades)
+                         .ThenInclude(gr => gr.Assaignment)
+                            .ThenInclude(a => a.Course)
+                    .FirstOrDefault(us => us.UserName == username && us.EnrolledStudents.Any(es => es.Course.Name == coursename));
+            }
+            else
+            {
+                user = this.data.Users.All()
+                    .Include(us => us.Grades)
+                        .ThenInclude(gr => gr.Assaignment)
+                            .ThenInclude(a => a.Course)
+                .FirstOrDefault(us => us.UserName == username);
+            }
 
             if (user == null)
             {
@@ -113,11 +126,11 @@ namespace demo_db.Services
 
             foreach (var grade in user.Grades)
             {
-                if (grade.Assaignment.Course.Name == coursename)
+                if(grade.Assaignment.Course.Name == coursename)
                 {
-                    gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
+                    gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Course = new CourseViewModel { CourseName = grade.Assaignment.Course.Name}, Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
                 }
-
+                
             }
             return gradesMapped;
         }
