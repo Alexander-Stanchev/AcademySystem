@@ -29,17 +29,10 @@ namespace demo_db.core.Commands
             }
             else
             {
-                var grades = this.serviceCourse.RetrieveGrades(this.State.UserName);
+                var grades = this.serviceCourse.RetrieveGrades(this.State.UserName);                
                 
-                ExportToPDF.GeneratePDFReport();
-                var sb = new StringBuilder();
-                sb.AppendLine($"Grades for: ");
-                foreach (var grade in grades)
-                {
-                    sb.AppendLine($"{grade.Assaingment.Name}: {grade.Score} out of {grade.Assaingment.MaxPoints}");
-                }
-                return sb.ToString();
-                
+                ExportToPDF.GeneratePDFReport(grades, this.State.UserName);
+                return "Created PDF Report";
             }
             
         }
