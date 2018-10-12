@@ -12,5 +12,6 @@ namespace demo_db.Services.Abstract
         int LoginUser(string username, string password);
         void UpdateRole(string userName, int newRoleString);
 
+
     }
 }
