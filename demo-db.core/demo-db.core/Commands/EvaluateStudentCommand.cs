@@ -1,4 +1,5 @@
 ﻿using demo_db.Common.Exceptions;
+using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
@@ -11,7 +12,7 @@ namespace demo_db.core.Commands
     {
         private IUserService serviceUser;
 
-        public EvaluateStudentCommand(ISessionState state, IUserService serviceUser) : base(state)
+        public EvaluateStudentCommand(ISessionState state, IStringBuilderWrapper builder, IUserService serviceUser) : base(state, builder)
         {
             this.serviceUser = serviceUser;
         }
