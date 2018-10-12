@@ -47,8 +47,7 @@ namespace demo_db.Services
         }
 
         public User RetrieveUser(string username)
-        {
-            
+        {            
             var user = this.data.Users.All()
                 .Include(u => u.Role)
                 .FirstOrDefault(u => u.UserName == username);
@@ -56,7 +55,7 @@ namespace demo_db.Services
             return user;
         }
 
-        private User RetrieveFullUser(string username)
+        public User RetrieveFullUser(string username)
         {
             Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
             Validations.VerifyUserName(username);
