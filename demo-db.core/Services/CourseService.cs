@@ -14,31 +14,39 @@ namespace demo_db.Services
     public class CourseService : ICourseService
     {
         private readonly IDataHandler data;
+        private IUserService userService;
 
-        public CourseService(IDataHandler context)
+        public CourseService(IDataHandler context, IUserService userService)
         {
             this.data = context ?? throw new ArgumentNullException(nameof(context));
+            this.userService = userService;
         }
 
-        public void AddCourse(string coursename, int teacherID, DateTime start, DateTime end)
+        public void AddCourse(string coursename, string username, DateTime start, DateTime end)
         {
             Validations.ValidateLength(Validations.MIN_COURSENAME, Validations.MAX_COURSENAME, coursename, $"The course name can't be less than {Validations.MIN_COURSENAME} and greater than {Validations.MAX_COURSENAME}");
 
             var course = this.RetrieveCourse(coursename);
-            if (course == null)
+
+            var teacher = userService.RetrieveUser(username);
+
+            if (teacher.RoleId != 2)
             {
-                if (course.Teacher.RoleId == 2)
-                {
-                    course = new Course
-                    {
-                        Name = coursename,
-                        TeacherId = teacherID,
-                        Start = start,
-                        End = end
-                    };
-                }
+                throw new ArgumentOutOfRangeException("You don't have access.");
             }
 
+            if (course == null)
+            {
+                course = new Course
+                {
+                    Name = coursename,
+                    TeacherId = teacher.Id,
+                    Start = start,
+                    End = end
+                };
+            }
+            data.Courses.Add(course);
+            data.SaveChanges();
 
         }
 
@@ -118,16 +126,11 @@ namespace demo_db.Services
 
             foreach (var grade in user.Grades)
             {
-                if(coursename == "")
-                {
-                    gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Course = new CourseViewModel { CourseName = grade.Assaignment.Course.Name }, Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
-                }
-                else if (grade.Assaignment.Course.Name == coursename)
+                if(grade.Assaignment.Course.Name == coursename)
                 {
                     gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Course = new CourseViewModel { CourseName = grade.Assaignment.Course.Name}, Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
                 }
-
-
+                
             }
             return gradesMapped;
         }
