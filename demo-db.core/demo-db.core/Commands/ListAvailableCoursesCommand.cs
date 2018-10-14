@@ -29,7 +29,7 @@ namespace demo_db.core.Commands
             }
             else
             {
-                var courses = this.serviceCourse.RetrieveCourseNames(this.State.RoleId , this.State.UserName);
+                var courses = this.serviceCourse.RetrieveCourseNames(this.State.RoleId, this.State.UserName);
                 if (courses.Count == 0)
                 {
                     return "There are no available courses at this moment!";

@@ -5,6 +5,7 @@ using demo_db.Data.DataModels;
 using demo_db.Services.Abstract;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace demo_db.core.Commands
@@ -44,11 +45,11 @@ namespace demo_db.core.Commands
                     foreach (var student in students)
                     {
                         var grades = this.serviceCourse.GradesString(student.UserName);
-
+                        var averageGrade = grades.Count == 0 ? 0 : grades.Average();
                         var gradesResult = grades.Count == 0 ? "None" : string.Join(", ", grades);
                     
 
-                        this.Builder.AppendLine($"Username: {student.UserName}, full name: {student.FullName}, Grades: {gradesResult}");
+                        this.Builder.AppendLine($"Username: {student.UserName}, full name: {student.FullName}, Grades: {gradesResult} (Average score: {averageGrade})");
                     }
                     return this.Builder.ToString();
                 }
