@@ -47,7 +47,6 @@ namespace demo_db.Services
             }
             data.Courses.Add(course);
             data.SaveChanges();
-
         }
 
         public void EnrollStudent(string username, string coursename)
@@ -77,7 +76,6 @@ namespace demo_db.Services
                 user.EnrolledStudents.Add(enrolled);
                 this.data.SaveChanges();
             }
-
         }
 
         public IList<CourseViewModel> RetrieveCourseNames(int roleId, string username = "")
@@ -111,6 +109,7 @@ namespace demo_db.Services
             }
             return returnValues;
         }
+
         public IList<GradeViewModel> RetrieveGrades(string username, string coursename = "")
         {
             var user = new User();
@@ -148,12 +147,10 @@ namespace demo_db.Services
                 {
                     gradesMapped.Add(new GradeViewModel { Assaingment = new AssaignmentViewModel { Course = new CourseViewModel { CourseName = grade.Assaignment.Course.Name }, Name = grade.Assaignment.Name, MaxPoints = grade.Assaignment.MaxPoints }, Score = grade.ReceivedGrade });
                 }
-
-
             }
             return gradesMapped;
-
         }
+
         private Course RetrieveCourse(string coursename)
         {
             var course = this.data.Courses.All()
@@ -162,6 +159,5 @@ namespace demo_db.Services
 
             return course;
         }
-
     }
 }

@@ -11,6 +11,5 @@ namespace demo_db.Services.Abstract
         void EnrollStudent(string username, string coursename);
         IList<CourseViewModel> RetrieveCourseNames(int roleId, string username = "");
         IList<GradeViewModel> RetrieveGrades(string username, string coursename = "");
-
     }
 }

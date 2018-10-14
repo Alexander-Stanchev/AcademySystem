@@ -34,9 +34,7 @@ namespace demo_db.core.Commands
 
                 this.exporter.GenerateReport(grades, this.State.UserName);
                 return "Created PDF Report";
-            }
-            
-        }
-        
+            }            
+        }        
     }
 }

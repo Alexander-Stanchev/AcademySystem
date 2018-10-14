@@ -3,8 +3,6 @@ using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 
-
-
 namespace demo_db.core.Commands
 {
     public class EnrollStudentCommand : CommandAbstract
@@ -46,7 +44,6 @@ namespace demo_db.core.Commands
                 {
                     return ex.Message;
                 }
-
             }
         }
     }

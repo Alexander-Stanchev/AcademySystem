@@ -35,7 +35,6 @@ namespace demo_db.Data.Repositories
             {
                 this.assaignments = value;
             }
-
         }
 
         public ICourseRepositoryEF Courses

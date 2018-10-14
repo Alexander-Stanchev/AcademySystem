@@ -37,8 +37,6 @@ namespace demo_db.core.Commands
 
                 return "Grade successfully added.";
             }
-
-
         }
     }
 }

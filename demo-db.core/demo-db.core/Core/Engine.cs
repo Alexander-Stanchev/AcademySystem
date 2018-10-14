@@ -3,7 +3,6 @@ using demo_db.Common.Exceptions;
 using demo_db.core.Contracts;
 using System;
 
-
 namespace demo_db.core.Core
 {
     public class Engine : IEngine
@@ -80,7 +79,6 @@ namespace demo_db.core.Core
                         this.Writer.WriteLine(ex.Message);
                     }
                 }
-
             }
         }
     }

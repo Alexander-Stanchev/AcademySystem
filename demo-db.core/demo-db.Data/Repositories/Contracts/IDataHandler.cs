@@ -15,6 +15,5 @@ namespace demo_db.Data.Repositories.Contracts
         IRoleRepositoryEF Roles { get; }
 
         int SaveChanges();
-
     }
 }

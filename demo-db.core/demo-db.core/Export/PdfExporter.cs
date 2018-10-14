@@ -5,13 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-
-
 namespace demo_db.core.Export
 {
     public class PdfExporter : IExporter
     {
-
         public void GenerateReport(IList<Services.ViewModels.GradeViewModel> grades, string username)
         {
             try
@@ -49,14 +46,11 @@ namespace demo_db.core.Export
                         gradeTables[currentTable].AddCell("Assaignment Name");
                         gradeTables[currentTable].AddCell("Your Score");
                         gradeTables[currentTable].AddCell("Max Score");
-
-
                     }
 
                     gradeTables[currentTable].AddCell($"{item.Assaingment.Name}");
                     gradeTables[currentTable].AddCell($"{item.Score}");
                     gradeTables[currentTable].AddCell($"{item.Assaingment.MaxPoints}");
-
                 }
 
                 //Set up file name and directory
@@ -96,5 +90,4 @@ namespace demo_db.core.Export
             }
         }
     }
-
 }

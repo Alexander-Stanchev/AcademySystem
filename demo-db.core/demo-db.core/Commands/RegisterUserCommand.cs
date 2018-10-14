@@ -35,7 +35,6 @@ namespace demo_db.core.Commands
                 {                    
                     return ex.Message;
                 }
-
             }
         }
     }

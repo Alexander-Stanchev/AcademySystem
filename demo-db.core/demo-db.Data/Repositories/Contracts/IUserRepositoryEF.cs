@@ -14,7 +14,5 @@ namespace demo_db.Data.Repositories.Contracts
         void Add(User entity);
 
         void Update(User entity);
-
-
     }
 }

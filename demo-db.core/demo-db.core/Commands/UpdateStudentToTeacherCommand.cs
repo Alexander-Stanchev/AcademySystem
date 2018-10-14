@@ -34,4 +34,3 @@ namespace demo_db.core.Commands
         }
     }
 }
-

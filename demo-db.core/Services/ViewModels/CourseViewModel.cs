@@ -10,7 +10,5 @@ namespace demo_db.Services.ViewModels
         public string CourseName { get; set; }
         public int TeacherId { get; set; }
         public UserViewModel Teacher { get; set; }
-
-
     }
 }

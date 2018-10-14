@@ -13,8 +13,8 @@ namespace demo_db.Services
         public const int MAX_COURSENAME = 50;
         public const int MIN_ASS = 3;
         public const int MAX_ASS = 50;
-
-
+        public const int MIN_PASSWORD = 3;
+        public const int MAX_PASSWORD = 35;
 
         public static void ValidateLength(int min, int max, string input, string message)
         {

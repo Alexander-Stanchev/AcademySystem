@@ -18,7 +18,6 @@ namespace demo_db.Services
 
         public Role RetrieveRole(string roleName)
         {
-
             Role role = this.data.Roles.All()
                 .FirstOrDefault(u => u.Name == roleName);
 

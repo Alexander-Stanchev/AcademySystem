@@ -26,7 +26,6 @@ namespace demo_db.core.Core
                 Console.WriteLine(ex.Message);
                 return null;
             }
-
         }
     }
 }

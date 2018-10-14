@@ -9,6 +9,5 @@ namespace demo_db.Common.Enum
         Administrator,
         Teacher,
         Student
-
     }
 }

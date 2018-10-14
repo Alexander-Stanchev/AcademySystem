@@ -32,7 +32,6 @@ namespace demo_db.core.Core
             {
                 return command.Execute(commandArguments);
             }
-
         }
     }
 }

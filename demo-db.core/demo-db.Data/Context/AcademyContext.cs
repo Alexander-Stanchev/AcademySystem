@@ -40,7 +40,6 @@ namespace demo_db.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             if (File.Exists("../demo-db.Data/Files/roles.json") &&
                 File.Exists("../demo-db.Data/Files/users.json") &&
                 File.Exists("../demo-db.Data/Files/courses.json") &&

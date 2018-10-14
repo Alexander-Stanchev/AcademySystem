@@ -12,7 +12,6 @@ namespace demo_db.Services
 {
     public class UserService : IUserService
     {
-
         private IDataHandler data;
 
         public UserService(IDataHandler context)
@@ -24,6 +23,7 @@ namespace demo_db.Services
         {
             Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
             Validations.ValidateLength(Validations.MIN_FULLNAME, Validations.MAX_FULLNAME, fullname, $"The full name provided can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            Validations.ValidateLength(Validations.MIN_PASSWORD, Validations.MAX_PASSWORD, password, $"The password can`t be less than {Validations.MIN_PASSWORD} and greater than {Validations.MAX_PASSWORD}");
             Validations.VerifyUserName(username);
 
             var user = RetrieveUser(username);

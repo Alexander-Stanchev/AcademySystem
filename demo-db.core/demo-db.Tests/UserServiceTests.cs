@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Linq;
 
 namespace demo_db.Tests
 {
@@ -27,9 +26,22 @@ namespace demo_db.Tests
             var fullname = "Pesho Goshov";
 
             //Assert + Act
-
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => sut.AddUser(username, password, fullname));
+        }
 
+        [TestMethod]
+        public void AddUserShouldThrowWhenInvalidPassword()
+        {
+            // Arrange 
+            var mockRepository = new Mock<IDataHandler>();
+            var sut = new UserService(mockRepository.Object);
+
+            var username = "UserName";
+            var password = "p";
+            var fullname = "Pesho Goshov";
+
+            //Assert + Act
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => sut.AddUser(username, password, fullname));
         }
 
         [TestMethod]
@@ -44,16 +56,13 @@ namespace demo_db.Tests
             var fullname = "P";
 
             //Assert + Act
-
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => sut.AddUser(username, password, fullname));
-
         }
 
         [TestMethod]
         public void AddUserShouldThrowWhenUsernameNotAvailable()
         {
             // Arrange 
-
             var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
                 .UseInMemoryDatabase(databaseName: "AddUserShouldThrowWhenUsernameNotAvailable")
                 .Options;
@@ -68,7 +77,6 @@ namespace demo_db.Tests
             var studentRole = new Role { Id = 3, Name = "Student" };
 
             //Act + Assert
-
             using (var context = new AcademyContext(contextOptions))
             {
                 var dataHandler = new DataHandler(context);
@@ -78,8 +86,7 @@ namespace demo_db.Tests
                 dataHandler.Roles.Add(studentRole);
 
                 var sut = new UserService(dataHandler);
-                sut.AddUser(username, password, fullname);
-                
+                sut.AddUser(username, password, fullname);                
             }
 
             using(var assertContext = new AcademyContext(contextOptions))
@@ -88,6 +95,6 @@ namespace demo_db.Tests
                 var sut = new UserService(dataHandler);
                 Assert.ThrowsException<UserAlreadyExistsException>(() => sut.AddUser(username, password, fullname));
             }
-        }
+        }        
     }
 }

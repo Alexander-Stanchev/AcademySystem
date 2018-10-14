@@ -8,6 +8,5 @@ namespace demo_db.core.Contracts
         string UserName { get; }
         int RoleId { get; }
         void Login(int roleId, string userName);
-
     }
 }

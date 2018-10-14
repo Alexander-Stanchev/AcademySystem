@@ -32,7 +32,6 @@ namespace demo_db.core.Commands
                 DateTime start = DateTime.Parse(parameters[1]);
                 DateTime end = DateTime.Parse(parameters[2]);
 
-
                 try
                 {
                     this.service.AddCourse(course, this.State.UserName, start, end);
@@ -42,7 +41,6 @@ namespace demo_db.core.Commands
                 {
                     return ex.Message;
                 }
-
             }
         }
     }

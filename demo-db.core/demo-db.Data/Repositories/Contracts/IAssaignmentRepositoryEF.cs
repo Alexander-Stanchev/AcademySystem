@@ -14,6 +14,5 @@ namespace demo_db.Data.Repositories.Contracts
         void Add(Assaignment entity);
 
         void Update(Assaignment entity);
-
     }
 }
