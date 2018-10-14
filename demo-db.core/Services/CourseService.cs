@@ -94,11 +94,11 @@ namespace demo_db.Services
             }
             else if (roleId == 2)
             {
-                   courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
-                    .Include(co => co.Teacher)
-                    .Where(c => c.TeacherId == user.Id)
-                    //.Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
-                    .ToList();
+                courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
+                 .Include(co => co.Teacher)
+                 .Where(c => c.TeacherId == user.Id)
+                 //.Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
+                 .ToList();
             }
 
             IList<CourseViewModel> returnValues = new List<CourseViewModel>();
@@ -158,6 +158,43 @@ namespace demo_db.Services
                 .FirstOrDefault(co => co.Name == coursename);
 
             return course;
+        }
+
+        public IList<User> RetrieveStudentsInCourse(string coursename, int roleId, string username)
+        {
+            //TODO not sure if this is the right way
+            if (this.data.Users.All().Where(us => us.EnrolledStudents.Any(es => es.Course.Name == coursename)).ToList().Count == 0)
+            {
+                throw new ArgumentNullException("I can't find users in this course. Did you use '_' instead of all the spaces in the course name?");
+            }
+
+
+            if (coursename == null)
+            {
+                throw new ArgumentNullException("coursename is null");
+            }
+            var teacher = this.data.Users.All()
+                        .FirstOrDefault(us => us.UserName == username);
+
+
+            //TODO ne raboti
+            if (this.data.Users.All().Where(us => us.EnrolledStudents.Any(t => t.Course.TeacherId == teacher.Id)).ToList().Count == 0)
+            {
+                throw new ArgumentNullException("Not the teacher for this course");
+            }
+
+            if (teacher == null)
+            {
+                throw new ArgumentNullException("I can find teacher with this username");
+            }
+
+            var users = this.data.Users.All()
+                   .Include(us => us.EnrolledStudents)
+                       .ThenInclude(gr => gr.Course)
+                       .Where(us => us.EnrolledStudents.Any(es => es.Course.Name == coursename)
+                       && us.EnrolledStudents.Any(t => t.Course.TeacherId == teacher.Id)).ToList();
+
+            return users;
         }
     }
 }

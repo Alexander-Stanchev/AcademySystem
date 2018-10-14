@@ -28,7 +28,7 @@ namespace demo_db.core.Commands
             }
             else
             {
-                string course = parameters[0];
+                string course = parameters[0].Replace('_', ' ');
                 DateTime start = DateTime.Parse(parameters[1]);
                 DateTime end = DateTime.Parse(parameters[2]);
 
