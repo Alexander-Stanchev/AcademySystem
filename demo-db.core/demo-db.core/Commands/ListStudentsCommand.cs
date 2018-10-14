@@ -36,14 +36,19 @@ namespace demo_db.core.Commands
 
                 if (students.Count == 0)
                 {
-                    return "There are no available courses at this moment!";
+                    return "There are no available students in this course!";
                 }
                 else
                 {
                     this.Builder.AppendLine($"The available students in {coursename} are:");
                     foreach (var student in students)
                     {
-                        this.Builder.AppendLine($"Username: {student.UserName}, full name: {student.FullName}, Registered on: {student.RegisteredOn}");
+                        var grades = this.serviceCourse.GradesString(student.UserName);
+
+                        var gradesResult = grades.Count == 0 ? "None" : string.Join(", ", grades);
+                    
+
+                        this.Builder.AppendLine($"Username: {student.UserName}, full name: {student.FullName}, Grades: {gradesResult}");
                     }
                     return this.Builder.ToString();
                 }

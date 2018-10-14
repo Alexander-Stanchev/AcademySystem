@@ -196,5 +196,19 @@ namespace demo_db.Services
 
             return users;
         }
+
+        public IList<double> GradesString(string username)
+        {
+            IList<GradeViewModel> grades = RetrieveGrades(username);
+
+            var gradesS = new List<double>();
+
+            foreach (var grade in grades)
+            {
+                gradesS.Add(grade.Score);
+            }
+
+            return gradesS;
+        }
     }
 }
