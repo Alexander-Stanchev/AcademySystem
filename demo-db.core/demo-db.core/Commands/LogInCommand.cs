@@ -1,4 +1,5 @@
 ﻿using demo_db.Common.Enum;
+using demo_db.Common.Exceptions;
 using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
@@ -19,10 +20,22 @@ namespace demo_db.core.Commands
         {
             if (this.State.IsLogged)
             {
-                return "You are already logged.";
+                return("You are already logged.");
             }
             else
             {
+                if (parameters.Length < 2)
+                {
+                    throw new ArgumentOutOfRangeException("You should provide at least 2 parameters for this command");
+                }
+                else if (parameters[0] == null)
+                {
+                    throw new ArgumentNullException("User name is null");
+                }
+                else if (parameters[1] == null)
+                {
+                    throw new ArgumentNullException("Password is null");
+                }
                 string userName = parameters[0];
                 string password = parameters[1];
                 try
@@ -31,7 +44,7 @@ namespace demo_db.core.Commands
                     this.State.Login(role,userName);
                     return $"User {userName} succesfully logged. Your role is {(RoleEnum)(role-1)}";
                 }
-                catch(Exception ex)
+                catch(UserAlreadyExistsException ex)
                 {
                     return ex.Message;
                 }

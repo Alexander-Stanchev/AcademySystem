@@ -3,8 +3,7 @@ using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace demo_db.core.Commands
 {
@@ -20,24 +19,39 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                throw new UserNotLoggedException("You will need to login first");
+                return("You will need to login first");
             }
             else if (this.State.RoleId != 2)
             {
-                throw new IncorrectPermissionsException("This command is available only to users with role Teacher");
+                return("This command is available only to users with role Teacher");
             }
             else
             {
-                string course = parameters[0].Replace('_', ' ');
-                DateTime start = DateTime.Parse(parameters[1]);
-                DateTime end = DateTime.Parse(parameters[2]);
+                string course = string.Join(' ', parameters.Skip(2)); ;
+                DateTime start;
+                DateTime end;
+
+                if (course == string.Empty)
+                {
+                   return("The course name can`t be null");
+                }
 
                 try
                 {
-                    this.service.AddCourse(course, this.State.UserName, start, end);
+                    start = DateTime.Parse(parameters[1]);
+                    end = DateTime.Parse(parameters[2]);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Please enter valid DateTime ");
+                }
+
+                try
+                {
+                    this.service.AddCourse(this.State.UserName, start, end, course);
                     return $"Course {course} is registered.";
                 }
-                catch (Exception ex)
+                catch (UserAlreadyExistsException ex)
                 {
                     return ex.Message;
                 }

@@ -1,6 +1,8 @@
-﻿using demo_db.Common.Wrappers;
+﻿using demo_db.Common.Exceptions;
+using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
+using System;
 
 
 namespace demo_db.core.Commands
@@ -19,16 +21,38 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                return "You have to log in first.";
+                return("You have to log in first.");
             }
 
             if (this.State.RoleId != 1)
             {
-                return "You dont have access.";
+                return("You dont have access.");
+            }
+
+            if (parameters[0] == null)
+            {
+                throw new ArgumentNullException("userName is null");
             }
 
             string userName = parameters[0];
-            this.service.UpdateRole(userName, teacherRoleId);
+            
+            if (parameters.Length > 1)
+            {
+                throw new ArgumentOutOfRangeException("You are passing more parameters than needed. You need to specify just the username");
+            }
+            try
+            {
+                this.service.UpdateRole(userName, teacherRoleId);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return ex.Message;
+            }
+            catch (ArgumentNullException ex)
+            {
+                return ex.Message;
+            }
+
 
             return $"User {userName} role is updated.";
         }

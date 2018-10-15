@@ -48,6 +48,10 @@ namespace demo_db.Services
 
         public User RetrieveUser(string username)
         {
+            if (username == null)
+            {
+                throw new ArgumentNullException("username is null");
+            }
             var user = this.data.Users.All()
                 .Include(u => u.Role)
                 .FirstOrDefault(u => u.UserName == username);

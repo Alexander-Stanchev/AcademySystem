@@ -2,7 +2,7 @@
 using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
-
+using System;
 
 namespace demo_db.core.Commands
 {
@@ -19,15 +19,21 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                throw new UserNotLoggedException("Please log before using commands");
+                return("Please log before using commands");
             }
             else if (this.State.RoleId != 3)
             {
-                throw new IncorrectPermissionsException("This command is available only to users with role Student");
+                return("This command is available only to users with role Student");
             }
             else
             {
                 var coursename = string.Join(' ', parameters);
+
+                if (coursename == string.Empty)
+                {
+                    throw new Exception("The course name can`t be null");
+                }
+
                 try
                 {
                     var grades = this.serviceCourse.RetrieveGrades(this.State.UserName, coursename);

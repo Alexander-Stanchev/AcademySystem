@@ -22,7 +22,7 @@ namespace demo_db.Services
             this.userService = userService;
         }
 
-        public void AddCourse(string coursename, string username, DateTime start, DateTime end)
+        public void AddCourse(string username, DateTime start, DateTime end, string coursename)
         {
             Validations.ValidateLength(Validations.MIN_COURSENAME, Validations.MAX_COURSENAME, coursename, $"The course name can't be less than {Validations.MIN_COURSENAME} and greater than {Validations.MAX_COURSENAME}");
 
