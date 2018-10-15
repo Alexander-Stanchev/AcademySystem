@@ -22,7 +22,7 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                throw new UserNotLoggedException("Please log before using commands");
+                return("Please log before using commands");
             }
             else if (this.State.RoleId != 3)
             {
@@ -34,7 +34,7 @@ namespace demo_db.core.Commands
 
                 if (grades.Count == 0)
                 {
-                    throw new Exception("There are no grades to export");
+                    return("There are no grades to export");
                 }
 
                 this.exporter.GenerateReport(grades, this.State.UserName);

@@ -21,16 +21,33 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                throw new UserNotLoggedException("Please log before using commands");
+                return("Please log before using commands");
             }
             else if (this.State.RoleId != 1)
             {
-                throw new IncorrectPermissionsException("This command is available only to users with role Admin");
+                return("This command is available only to users with role Admin");
             }
             else
             {
-                var roleId = int.Parse(parameters[0]);
+                var roleId = 0;
+                
+                if (parameters.Length < 1)
+                {
+                    throw new ArgumentOutOfRangeException("You need to pass only one argument which is the role Id");
+                }
+
+                try
+                {
+                    roleId = int.Parse(parameters[0]);
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+                
                 var users = this.serviceUser.RetrieveUsers(roleId);
+
+
                 if (users.Count == 0)
                 {
                     return "There are no users.";

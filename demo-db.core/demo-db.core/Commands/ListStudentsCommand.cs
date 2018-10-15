@@ -3,6 +3,7 @@ using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using demo_db.Services.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,18 +21,25 @@ namespace demo_db.core.Commands
 
         public override string Execute(string[] parameters)
         {
-            string coursename = parameters[0].Replace('_', ' ');
 
             if (!this.State.IsLogged)
             {
-                throw new UserNotLoggedException("Please log before using commands");
+                return("Please log before using commands");
             }
             else if (this.State.RoleId != 2)
             {
-                throw new IncorrectPermissionsException("This command is available only to users with role Teacher");
+                return("This command is available only to users with role Teacher");
             }
             else
             {
+
+                if (parameters.Length == 0)
+                {
+                    throw new ArgumentOutOfRangeException("No parameters added");
+                }
+
+                string coursename = string.Join(' ', parameters);
+
                 IList<UserViewModel> students = this.serviceCourse.RetrieveStudentsInCourse(coursename, this.State.RoleId, this.State.UserName);
 
                 if (students.Count == 0)

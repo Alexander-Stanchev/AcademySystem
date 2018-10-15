@@ -40,8 +40,19 @@ namespace demo_db.core.Commands
             {
                 throw new ArgumentOutOfRangeException("You are passing more parameters than needed. You need to specify just the username");
             }
+            try
+            {
+                this.service.UpdateRole(userName, teacherRoleId);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return ex.Message;
+            }
+            catch (ArgumentNullException ex)
+            {
+                return ex.Message;
+            }
 
-            this.service.UpdateRole(userName, teacherRoleId);
 
             return $"User {userName} role is updated.";
         }

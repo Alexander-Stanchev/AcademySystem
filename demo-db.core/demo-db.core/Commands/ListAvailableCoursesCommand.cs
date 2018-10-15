@@ -21,11 +21,11 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                throw new UserNotLoggedException("Please log before using commands");
+                return("Please log before using commands");
             }
             else if (this.State.RoleId == 1)
             {
-                throw new IncorrectPermissionsException("This command is available only to users with role Student or Teacher");
+                return("This command is available only to users with role Student or Teacher");
             }
             else
             {
