@@ -97,7 +97,6 @@ namespace demo_db.Services
                 courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
                  .Include(co => co.Teacher)
                  .Where(c => c.TeacherId == user.Id)
-                 //.Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
                  .ToList();
             }
 
@@ -160,25 +159,23 @@ namespace demo_db.Services
             return course;
         }
 
-        public IList<User> RetrieveStudentsInCourse(string coursename, int roleId, string username)
+        public IList<UserViewModel> RetrieveStudentsInCourse(string coursename, int roleId, string username)
         {
-            //TODO not sure if this is the right way
-            if (this.data.Users.All().Where(us => us.EnrolledStudents.Any(es => es.Course.Name == coursename)).ToList().Count == 0)
-            {
-                throw new ArgumentNullException("I can't find users in this course. Did you use '_' instead of all the spaces in the course name?");
-            }
-
-
             if (coursename == null)
             {
                 throw new ArgumentNullException("coursename is null");
             }
-            var teacher = this.data.Users.All()
-                        .FirstOrDefault(us => us.UserName == username);
 
+            var course = RetrieveCourse(coursename);
 
-            //TODO ne raboti
-            if (this.data.Users.All().Where(us => us.EnrolledStudents.Any(t => t.Course.TeacherId == teacher.Id)).ToList().Count == 0)
+            if (course == null)
+            {
+                throw new ArgumentNullException("I can't find users in this course. Did you use '_' instead of all the spaces in the course name?");
+            }
+
+            var teacher = course.Teacher;
+
+            if (teacher.UserName != username)
             {
                 throw new ArgumentNullException("Not the teacher for this course");
             }
@@ -189,26 +186,24 @@ namespace demo_db.Services
             }
 
             var users = this.data.Users.All()
+                .Include(us => us.Grades)
+                    .ThenInclude(gr => gr.Assaignment)
+                        .ThenInclude(a => a.Course)
                    .Include(us => us.EnrolledStudents)
                        .ThenInclude(gr => gr.Course)
-                       .Where(us => us.EnrolledStudents.Any(es => es.Course.Name == coursename)
-                       && us.EnrolledStudents.Any(t => t.Course.TeacherId == teacher.Id)).ToList();
+                       .Where(us => us.EnrolledStudents.Any(es => es.Course.Name == coursename))
+                       .ToList();
 
-            return users;
-        }
 
-        public IList<double> GradesString(string username)
-        {
-            IList<GradeViewModel> grades = RetrieveGrades(username);
+            var result = new List<UserViewModel>(users.Count);
 
-            var gradesS = new List<double>();
-
-            foreach (var grade in grades)
+            foreach(var user in users)
             {
-                gradesS.Add(grade.Score);
+                result.Add(new UserViewModel { Username = user.UserName, FullName = user.FullName, Grades = user.Grades.Where(gr => gr.Assaignment.Course.Name == coursename).Select(gr => new GradeViewModel { Score = gr.ReceivedGrade}).ToList() });
             }
 
-            return gradesS;
+            return result;
         }
+
     }
 }
