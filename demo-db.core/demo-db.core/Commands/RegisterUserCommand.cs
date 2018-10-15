@@ -3,6 +3,7 @@ using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System.Linq;
+using System;
 
 
 namespace demo_db.core.Commands
@@ -19,10 +20,27 @@ namespace demo_db.core.Commands
         {
             if (this.State.IsLogged)
             {
-                return "You are already logged.";
+                throw new UserAlreadyExistsException("You are already logged.");
             }
             else
             {
+                if (parameters.Length < 4)
+                {
+                    throw new ArgumentOutOfRangeException("You should provide at least 4 parameters for this command");
+                }
+                else if (parameters[0] == null)
+                {
+                    throw new ArgumentNullException("User name is null");
+                }
+                else if (parameters[1] == null)
+                {
+                    throw new ArgumentNullException("Password is null");
+                }
+                else if (parameters[2] == null)
+                {
+                    throw new ArgumentNullException("Full name is null");
+                }
+                
                 string userName = parameters[0];
                 string password = parameters[1];
                 string fullName = string.Join(' ',parameters.Skip(2));
