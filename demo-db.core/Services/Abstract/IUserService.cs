@@ -9,7 +9,6 @@ namespace demo_db.Services.Abstract
     public interface IUserService
     {
         void AddUser(string username, string password, string fullname);
-        void EnrollCourse(User user, Course course);
         int LoginUser(string username, string password);
         void UpdateRole(string userName, int newRoleString);
         User RetrieveUser(string username);

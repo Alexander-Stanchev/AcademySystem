@@ -186,23 +186,18 @@ namespace demo_db.Services
             }
 
             var users = this.data.Users.All()
-                .Include(us => us.Grades)
-                    .ThenInclude(gr => gr.Assaignment)
-                        .ThenInclude(a => a.Course)
-                   .Include(us => us.EnrolledStudents)
-                       .ThenInclude(gr => gr.Course)
-                       .Where(us => us.EnrolledStudents.Any(es => es.Course.Name == coursename))
-                       .ToList();
+                .Where(us => us.EnrolledStudents.Any(es => es.Course.Name == coursename))
+                .Select(user => new UserViewModel
+                {
+                    Username = user.UserName,
+                    FullName = user.FullName,
+                    Grades = user.Grades
+                        .Where(gr => gr.Assaignment.Course.Name == coursename).Select(gr => new GradeViewModel { Score = gr.ReceivedGrade }).ToList()
+                })
+                .ToList();
 
 
-            var result = new List<UserViewModel>(users.Count);
-
-            foreach(var user in users)
-            {
-                result.Add(new UserViewModel { Username = user.UserName, FullName = user.FullName, Grades = user.Grades.Where(gr => gr.Assaignment.Course.Name == coursename).Select(gr => new GradeViewModel { Score = gr.ReceivedGrade}).ToList() });
-            }
-
-            return result;
+            return users;
         }
 
     }
