@@ -19,7 +19,7 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                return("Please log before using commands");
+                return("You will need to login first");
             }
             else if (this.State.RoleId != 3)
             {
@@ -31,7 +31,7 @@ namespace demo_db.core.Commands
 
                 if (coursename == string.Empty)
                 {
-                    throw new Exception("The course name can`t be null");
+                    return "The course name can`t be null";
                 }
 
                 try

@@ -92,6 +92,10 @@ namespace demo_db.Tests
             //Assert + Act
             Assert.ThrowsException<Exception>(() => command.Execute(parameters));
         }
+
+        //Test fails due to difference in the DateTime format
+        //should be dd-mm-yyyy but it works only with mm-dd-yyyy - unknown reasons
+
         [TestMethod]
         public void ExecuteShouldCallServiceMethodAddCourseOnce()
         {
@@ -111,8 +115,7 @@ namespace demo_db.Tests
 
             command.Execute((parameters));
 
-            service.Verify(s => s.AddCourse("pesho", DateTime.Parse("06 - 22 - 2012"), DateTime.Parse("06-22-2013"), "Alpha JS"), Times.Once);
-        }
-        
+            service.Verify(s => s.AddCourse("pesho", DateTime.Parse("06-22-2012"), DateTime.Parse("06-22-2013"), "Alpha JS"), Times.Once);
+        }        
     }
 }
