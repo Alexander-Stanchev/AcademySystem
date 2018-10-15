@@ -1,5 +1,4 @@
-﻿using demo_db.Common.Exceptions;
-using demo_db.Common.Wrappers;
+﻿using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
@@ -7,7 +6,7 @@ using System;
 
 namespace demo_db.core.Commands
 {
-    class UpdateStudentToTeacherCommand : CommandAbstract
+    public class UpdateStudentToTeacherCommand : CommandAbstract
     {
         private IUserService service;
         private const int teacherRoleId = 2;
@@ -29,7 +28,7 @@ namespace demo_db.core.Commands
                 return("You dont have access.");
             }
 
-            if (parameters[0] == null)
+            if (string.IsNullOrEmpty(parameters[0]))
             {
                 throw new ArgumentNullException("userName is null");
             }
