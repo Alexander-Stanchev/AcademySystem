@@ -93,40 +93,26 @@ namespace demo_db.Tests
             Assert.ThrowsException<Exception>(() => command.Execute(parameters));
         }
         [TestMethod]
-        public void ExecuteShouldThrownWhenUserExists()
+        public void ExecuteShouldCallServiceMethodAddCourseOnce()
         {
             //Arrange
             var state = new Mock<ISessionState>();
             var builder = new Mock<IStringBuilderWrapper>();
             var service = new Mock<ICourseService>();
 
-            var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
-                .UseInMemoryDatabase(databaseName: "ExecuteShouldThrownWhenUserExists")
-                .Options;
-            
-            //Setup roles for the in-memory database
-            var adminRole = new Role { Id = 1, Name = "Administrator" };
-            var teacherRole = new Role { Id = 2, Name = "Teacher" };
-            var studentRole = new Role { Id = 3, Name = "Student" };
+            state.Setup(s => s.IsLogged).Returns(true);
+            state.Setup(s => s.RoleId).Returns(2);
+            state.SetupGet(s => s.UserName).Returns("pesho");
+           
 
             var command = new AddCourseCommand(state.Object, builder.Object, service.Object);
 
-            state.Setup(s => s.IsLogged).Returns(true);
-            state.Setup(s => s.RoleId).Returns(2);
+            var parameters = new string[] {"06-22-2012", "06-22-2013", "Alpha JS"};
 
-            var course = new Course { CourseId = 1, Name = "Alpha JS" };
-            var parameters = new string[] { "22-06-2012", "22-06-2013", "Alpha JS" };
-            //Act + Assert
-            using (var context = new AcademyContext(contextOptions))
-            {
-                var dataHandler = new DataHandler(context);
+            command.Execute((parameters));
 
-                dataHandler.Courses.Add(course);
-                dataHandler.SaveChanges();
-
-                Assert.ThrowsException<UserAlreadyExistsException>(() => command.Execute(parameters));
-                
-            }
+            service.Verify(s => s.AddCourse("pesho", DateTime.Parse("06 - 22 - 2012"), DateTime.Parse("06-22-2013"), "Alpha JS"), Times.Once);
         }
+        
     }
 }

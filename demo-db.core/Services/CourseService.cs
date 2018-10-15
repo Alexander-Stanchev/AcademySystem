@@ -35,16 +35,21 @@ namespace demo_db.Services
                 throw new ArgumentOutOfRangeException("You don't have access.");
             }
 
-            if (course == null)
+            if (course != null)
             {
-                course = new Course
-                {
-                    Name = coursename,
-                    TeacherId = teacher.Id,
-                    Start = start,
-                    End = end
-                };
+                throw new UserAlreadyExistsException("Course already exists");
             }
+
+            course = new Course
+            {
+                Name = coursename,
+                TeacherId = teacher.Id,
+                Start = start,
+                End = end
+            };
+
+
+
             data.Courses.Add(course);
             data.SaveChanges();
         }

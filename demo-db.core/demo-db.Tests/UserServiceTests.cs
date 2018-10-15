@@ -241,7 +241,6 @@ namespace demo_db.Tests
             var teacherRole = new Role { Id = 2, Name = "Teacher" };
             var studentRole = new Role { Id = 3, Name = "Student" };
             var user = new User { UserName = "pesho007", Deleted = false, FullName = "Gosho Peshov", Password = "parola", RoleId = 2, RegisteredOn = DateTime.Now, Id = 1, Role = studentRole };
-            int roleId;
 
             using (var context = new AcademyContext(contextOptions))
             {
@@ -378,10 +377,6 @@ namespace demo_db.Tests
             var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
                 .UseInMemoryDatabase(databaseName: "UpdateRoleShouldUpdateProperlyIfCorrectParamsPassed")
                 .Options;
-
-            var username = "username";
-            var roleId = 2;
-
 
             //Setup roles for the in-memory database
             var adminRole = new Role { Id = 1, Name = "Administrator" };
