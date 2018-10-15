@@ -676,5 +676,81 @@ namespace demo_db.Tests
 
             }
         }
+        [TestMethod]
+        public void EvaluateStudentShouldAddGradeWhenCorrectParametersArePassed()
+        {
+            // Arrange 
+            var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
+                .UseInMemoryDatabase(databaseName: "EvaluateStudentShouldAddGradeWhenCorrectParametersArePassed")
+                .Options;
+
+            //Setup roles for the in-memory database
+            var adminRole = new Role { Id = 1, Name = "Administrator" };
+            var teacherRole = new Role { Id = 2, Name = "Teacher" };
+            var studentRole = new Role { Id = 3, Name = "Student" };
+
+            var studentName = "pesho007";
+            var teacherName = "teacher2";
+
+            var student = new User
+            {
+                UserName = studentName,
+                Deleted = false,
+                FullName = "Gosho Peshov",
+                Password = "parola",
+                RoleId = 3,
+                RegisteredOn = DateTime.Now,
+                Id = 1,
+                Role = studentRole,
+                EnrolledStudents = new List<EnrolledStudent>()
+                    {
+                        new EnrolledStudent{CourseId = 1, StudentId = 1}
+                    }
+
+            };
+
+            var teacher = new User
+            {
+                UserName = teacherName,
+                Deleted = false,
+                FullName = "Gosho Peshov",
+                Password = "parola",
+                RoleId = 2,
+                RegisteredOn = DateTime.Now,
+                Id = 2,
+                Role = studentRole
+            };
+
+            var assaignment = new Assaignment
+            {
+                Course = new Course { Teacher = teacher, CourseId = 1 },
+                Id = 1,
+
+            };
+
+            //Act + Assert
+            using (var context = new AcademyContext(contextOptions))
+            {
+                var dataHandler = new DataHandler(context);
+
+                dataHandler.Roles.Add(adminRole);
+                dataHandler.Roles.Add(teacherRole);
+                dataHandler.Roles.Add(studentRole);
+                dataHandler.Users.Add(student);
+                dataHandler.Users.Add(teacher);
+
+                dataHandler.Assaignments.Add((assaignment));
+                dataHandler.SaveChanges();
+
+                var sut = new UserService(dataHandler);
+                sut.EvaluateStudent(studentName,1,88,teacherName);
+                var studentRetrieved = dataHandler.Users.All().FirstOrDefault(us => us.UserName == studentName);
+
+                Assert.IsTrue(studentRetrieved.Grades.Count == 1);
+                Assert.IsTrue(studentRetrieved.Grades.Any(gr => gr.AssaignmentId == 1 && gr.ReceivedGrade == 88));
+
+
+            }
+        }
     }
 }
