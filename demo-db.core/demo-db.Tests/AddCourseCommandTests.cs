@@ -92,6 +92,10 @@ namespace demo_db.Tests
             //Assert + Act
             Assert.ThrowsException<Exception>(() => command.Execute(parameters));
         }
+
+        //Test fails due to difference in the DateTime format
+        //should be dd-mm-yyyy but it works only with mm-dd-yyyy - unknown reasons
+
         [TestMethod]
         public void ExecuteShouldCallServiceMethodAddCourseOnce()
         {
