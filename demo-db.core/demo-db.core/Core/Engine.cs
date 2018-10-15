@@ -29,7 +29,7 @@ namespace demo_db.core.Core
             {
                this.Writer.WriteLine("Please login or register");
                this.Writer.WriteLine("For login use the following command: Login {username} {password}");
-               this.Writer.WriteLine("For registration use the following command: RegisterUser {username} {password}");
+               this.Writer.WriteLine("For registration use the following command: RegisterUser {username} {password} {full name}");
                var input = this.Reader.ReadLine();
                 try
                 {

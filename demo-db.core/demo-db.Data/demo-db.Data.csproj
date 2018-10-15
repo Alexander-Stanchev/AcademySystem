@@ -10,6 +10,7 @@
     <Compile Remove="Migrations\20181008075750_enrolledStudentsTableAdded.cs" />
     <Compile Remove="Migrations\20181008080002_enrolledStudentsTableAdded.cs" />
     <Compile Remove="Migrations\20181008080709_GradesAdded.cs" />
+    <Compile Remove="Migrations\20181015072331_testingcommands.cs" />
   </ItemGroup>
 
   <ItemGroup>

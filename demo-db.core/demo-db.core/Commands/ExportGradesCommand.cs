@@ -3,7 +3,7 @@ using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.core.Export.Abstract;
 using demo_db.Services.Abstract;
-
+using System;
 
 namespace demo_db.core.Commands
 {
@@ -31,6 +31,11 @@ namespace demo_db.core.Commands
             else
             {
                 var grades = this.serviceCourse.RetrieveGrades(this.State.UserName);
+
+                if (grades.Count == 0)
+                {
+                    throw new Exception("There are no grades to export");
+                }
 
                 this.exporter.GenerateReport(grades, this.State.UserName);
                 return "Created PDF Report";
