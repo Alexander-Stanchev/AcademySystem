@@ -3,8 +3,6 @@ using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace demo_db.core.Commands
 {
@@ -29,8 +27,23 @@ namespace demo_db.core.Commands
             else
             {
                 string course = parameters[0].Replace('_', ' ');
-                DateTime start = DateTime.Parse(parameters[1]);
-                DateTime end = DateTime.Parse(parameters[2]);
+                DateTime start;
+                DateTime end;             
+
+                if (course == string.Empty)
+                {
+                    throw new Exception("The course name can`t be null");
+                }
+
+                try
+                {
+                    start = DateTime.Parse(parameters[1]);
+                    end = DateTime.Parse(parameters[2]);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Please enter valid DateTime ");
+                }
 
                 try
                 {
