@@ -21,12 +21,12 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                throw new UserNotLoggedException("You have to log in first.");
+                return("You have to log in first.");
             }
 
             if (this.State.RoleId != 1)
             {
-                throw new IncorrectPermissionsException("You dont have access.");
+                return("You dont have access.");
             }
 
             if (parameters[0] == null)

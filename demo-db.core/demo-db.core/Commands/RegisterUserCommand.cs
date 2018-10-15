@@ -20,7 +20,7 @@ namespace demo_db.core.Commands
         {
             if (this.State.IsLogged)
             {
-                throw new UserAlreadyExistsException("You are already logged.");
+                return("You are already logged.");
             }
             else
             {
