@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace demo_db.core.Commands
 {
-    class AddCourseCommand : CommandAbstract
+    public class AddCourseCommand : CommandAbstract
     {
         private ICourseService service;
 
@@ -38,8 +38,8 @@ namespace demo_db.core.Commands
 
                 try
                 {
-                    start = DateTime.Parse(parameters[1]);
-                    end = DateTime.Parse(parameters[2]);
+                    start = DateTime.Parse(parameters[0]);
+                    end = DateTime.Parse(parameters[1]);
                 }
                 catch (Exception)
                 {

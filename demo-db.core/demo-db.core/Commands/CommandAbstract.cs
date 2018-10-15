@@ -5,7 +5,7 @@ namespace demo_db.core.Commands
 {
     public abstract class CommandAbstract : ICommand
     {
-        public CommandAbstract(ISessionState state, IStringBuilderWrapper builder)
+        protected CommandAbstract(ISessionState state, IStringBuilderWrapper builder)
         {
             this.State = state;
             this.Builder = builder;
