@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace demo_db.Tests
@@ -444,6 +445,235 @@ namespace demo_db.Tests
                 var usersRetrieved = sut.RetrieveUsers(2);
 
                 Assert.AreEqual(3, usersRetrieved.Count);
+            }
+        }
+
+        [TestMethod]
+        public void EvaluateStudentShouldThrowIfUserNameIsInvalid()
+        {
+            var stubRepository = new Mock<IDataHandler>();
+            var sut = new UserService(stubRepository.Object);
+
+            string username = "P";
+            int assignmentId = 2;
+            int grade = 80;
+            string teacherUsername = "PeshoPeshov";
+
+
+            //Assert + Act
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => sut.EvaluateStudent(username, assignmentId, grade, teacherUsername));
+        }
+
+        [TestMethod]
+        public void EvaluateStudentShouldThrowIfUserNameDoesntMatchRegex()
+        {
+            var stubRepository = new Mock<IDataHandler>();
+            var sut = new UserService(stubRepository.Object);
+
+            string username = "Pes ho";
+            int assignmentId = 2;
+            int grade = 80;
+            string teacherUsername = "PeshoPeshov";
+
+
+            //Assert + Act
+            Assert.ThrowsException<ArgumentException>(() => sut.EvaluateStudent(username, assignmentId, grade, teacherUsername));
+        }
+
+        [TestMethod]
+        public void EvaluateStudentShouldThrowWhenAssaignmentNotFound()
+        {
+            // Arrange 
+            var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
+                .UseInMemoryDatabase(databaseName: "EvaluateStudentShouldThrowWhenAssaignmentNotFound")
+                .Options;
+
+            //Setup roles for the in-memory database
+            var adminRole = new Role { Id = 1, Name = "Administrator" };
+            var teacherRole = new Role { Id = 2, Name = "Teacher" };
+            var studentRole = new Role { Id = 3, Name = "Student" };
+
+            var studentName = "pesho007";
+            var teacherName = "teacher";
+
+            var student = new User { UserName = studentName, Deleted = false, FullName = "Gosho Peshov", Password = "parola", RoleId = 3, RegisteredOn = DateTime.Now, Id = 1, Role = studentRole };
+            var teacher = new User { UserName = teacherName, Deleted = false, FullName = "Gosho Peshov", Password = "parola", RoleId = 2, RegisteredOn = DateTime.Now, Id = 2, Role = studentRole };
+            //Act + Assert
+            using (var context = new AcademyContext(contextOptions))
+            {
+                var dataHandler = new DataHandler(context);
+
+                dataHandler.Roles.Add(adminRole);
+                dataHandler.Roles.Add(teacherRole);
+                dataHandler.Roles.Add(studentRole);
+                dataHandler.Users.Add(student);
+                dataHandler.Users.Add(teacher);
+
+                dataHandler.SaveChanges();
+
+                var sut = new UserService(dataHandler);
+
+                Assert.ThrowsException<ArgumentNullException>(
+                    () => sut.EvaluateStudent(studentName, 1, 80, teacherName));
+
+            }
+        }
+        [TestMethod]
+        public void EvaluateStudentShouldThrowWhenTeacherIsDifferentThanPassed()
+        {
+            // Arrange 
+            var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
+                .UseInMemoryDatabase(databaseName: "EvaluateStudentShouldThrowWhenTeacherIsDifferentThanPassed")
+                .Options;
+
+            //Setup roles for the in-memory database
+            var adminRole = new Role { Id = 1, Name = "Administrator" };
+            var teacherRole = new Role { Id = 2, Name = "Teacher" };
+            var studentRole = new Role { Id = 3, Name = "Student" };
+
+            var studentName = "pesho007";
+            var teacherName = "teacher2";
+
+            var student = new User { UserName = studentName, Deleted = false, FullName = "Gosho Peshov", Password = "parola", RoleId = 3, RegisteredOn = DateTime.Now, Id = 1, Role = studentRole };
+            var teacher = new User { UserName = "teacher", Deleted = false, FullName = "Gosho Peshov", Password = "parola", RoleId = 2, RegisteredOn = DateTime.Now, Id = 2, Role = studentRole };
+            var invalidTeacher = new User { UserName = teacherName, Deleted = false, FullName = "Gosho Peshov", Password = "parola", RoleId = 2, RegisteredOn = DateTime.Now, Id = 3, Role = studentRole };
+            var assaignment = new Assaignment {Course = new Course {Teacher = teacher}, Id = 1};
+            //Act + Assert
+            using (var context = new AcademyContext(contextOptions))
+            {
+                var dataHandler = new DataHandler(context);
+
+                dataHandler.Roles.Add(adminRole);
+                dataHandler.Roles.Add(teacherRole);
+                dataHandler.Roles.Add(studentRole);
+                dataHandler.Users.Add(student);
+                dataHandler.Users.Add(teacher);
+                dataHandler.Users.Add(invalidTeacher);
+                dataHandler.Assaignments.Add((assaignment));
+                dataHandler.SaveChanges();
+
+                var sut = new UserService(dataHandler);
+
+                Assert.ThrowsException<ArgumentException>(
+                    () => sut.EvaluateStudent(studentName, 1, 80, teacherName));
+
+            }
+        }
+
+        [TestMethod]
+        public void EvaluateStudentShouldThrowWhenStudentIsEnrolledInCourse()
+        {
+            // Arrange 
+            var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
+                .UseInMemoryDatabase(databaseName: "EvaluateStudentShouldThrowWhenStudentIsEnrolledInCourse")
+                .Options;
+
+            //Setup roles for the in-memory database
+            var adminRole = new Role { Id = 1, Name = "Administrator" };
+            var teacherRole = new Role { Id = 2, Name = "Teacher" };
+            var studentRole = new Role { Id = 3, Name = "Student" };
+
+            var studentName = "pesho007";
+            var teacherName = "teacher2";
+
+            var student = new User { UserName = studentName, Deleted = false, FullName = "Gosho Peshov", Password = "parola", RoleId = 3, RegisteredOn = DateTime.Now, Id = 1, Role = studentRole };
+            var teacher = new User { UserName = teacherName, Deleted = false, FullName = "Gosho Peshov", Password = "parola", RoleId = 2, RegisteredOn = DateTime.Now, Id = 2, Role = studentRole };
+            
+            var assaignment = new Assaignment { Course = new Course { Teacher = teacher }, Id = 1 };
+            //Act + Assert
+            using (var context = new AcademyContext(contextOptions))
+            {
+                var dataHandler = new DataHandler(context);
+
+                dataHandler.Roles.Add(adminRole);
+                dataHandler.Roles.Add(teacherRole);
+                dataHandler.Roles.Add(studentRole);
+                dataHandler.Users.Add(student);
+                dataHandler.Users.Add(teacher);
+
+                dataHandler.Assaignments.Add((assaignment));
+                dataHandler.SaveChanges();
+
+                var sut = new UserService(dataHandler);
+
+                Assert.ThrowsException<ArgumentException>(
+                    () => sut.EvaluateStudent(studentName, 1, 80, teacherName));
+
+            }
+        }
+        [TestMethod]
+        public void EvaluateStudentShouldThrowWhenStudentAlreadyHasGradeForAssaignment()
+        {
+            // Arrange 
+            var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
+                .UseInMemoryDatabase(databaseName: "EvaluateStudentShouldThrowWhenStudentAlreadyHasGradeForAssaignment")
+                .Options;
+
+            //Setup roles for the in-memory database
+            var adminRole = new Role { Id = 1, Name = "Administrator" };
+            var teacherRole = new Role { Id = 2, Name = "Teacher" };
+            var studentRole = new Role { Id = 3, Name = "Student" };
+
+            var studentName = "pesho007";
+            var teacherName = "teacher2";
+
+            var student = new User
+                {
+                    UserName = studentName,
+                    Deleted = false, FullName = "Gosho Peshov",
+                    Password = "parola", RoleId = 3,
+                    RegisteredOn = DateTime.Now,
+                    Id = 1,
+                    Role = studentRole,
+                    Grades = new List<Grade>
+                    {
+                        new Grade{AssaignmentId = 1, ReceivedGrade = 88, StudentId = 1}
+                    },
+                    EnrolledStudents = new List<EnrolledStudent>()
+                    {
+                        new EnrolledStudent{CourseId = 1, StudentId = 1}
+                    }
+                    
+                };
+
+            var teacher = new User
+            {
+                UserName = teacherName,
+                Deleted = false,
+                FullName = "Gosho Peshov",
+                Password = "parola",
+                RoleId = 2,
+                RegisteredOn = DateTime.Now,
+                Id = 2,
+                Role = studentRole
+            };
+
+            var assaignment = new Assaignment
+            {
+                Course = new Course { Teacher = teacher, CourseId = 1},
+                Id = 1,
+                
+            };
+    
+            //Act + Assert
+            using (var context = new AcademyContext(contextOptions))
+            {
+                var dataHandler = new DataHandler(context);
+
+                dataHandler.Roles.Add(adminRole);
+                dataHandler.Roles.Add(teacherRole);
+                dataHandler.Roles.Add(studentRole);
+                dataHandler.Users.Add(student);
+                dataHandler.Users.Add(teacher);
+
+                dataHandler.Assaignments.Add((assaignment));
+                dataHandler.SaveChanges();
+
+                var sut = new UserService(dataHandler);
+
+                Assert.ThrowsException<ArgumentException>(
+                    () => sut.EvaluateStudent(studentName, 1, 80, teacherName));
+
             }
         }
     }

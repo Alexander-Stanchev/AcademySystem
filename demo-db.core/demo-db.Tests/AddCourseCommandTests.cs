@@ -113,6 +113,32 @@ namespace demo_db.Tests
 
             service.Verify(s => s.AddCourse("pesho", DateTime.Parse("06 - 22 - 2012"), DateTime.Parse("06-22-2013"), "Alpha JS"), Times.Once);
         }
-        
+
+        [TestMethod]
+        public void ExecuteShouldCatchUserAlreadyExistsException()
+        {
+            //Arrange
+            var state = new Mock<ISessionState>();
+            var builder = new Mock<IStringBuilderWrapper>();
+            var service = new Mock<ICourseService>();
+
+            state.Setup(s => s.IsLogged).Returns(true);
+            state.Setup(s => s.RoleId).Returns(2);
+            state.SetupGet(s => s.UserName).Returns("pesho");
+
+            service.Setup(s =>
+                    s.AddCourse("pesho", DateTime.Parse("06-22-2012"), DateTime.Parse("06-22-2013"), "Alpha JS"))
+                .Throws(new UserAlreadyExistsException("Course already exists"));
+               
+
+            var command = new AddCourseCommand(state.Object, builder.Object, service.Object);
+
+            var parameters = new string[] { "06-22-2012", "06-22-2013", "Alpha JS" };
+
+            var str = command.Execute(parameters);
+
+            Assert.AreEqual("Course already exists",str);
+        }
+
     }
 }
