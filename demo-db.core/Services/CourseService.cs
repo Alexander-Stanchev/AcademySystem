@@ -14,7 +14,7 @@ namespace demo_db.Services
     public class CourseService : ICourseService
     {
         private readonly IDataHandler data;
-        private IUserService userService;
+        private readonly IUserService userService;
 
         public CourseService(IDataHandler context, IUserService userService)
         {
@@ -89,7 +89,7 @@ namespace demo_db.Services
             {
                 courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
                     .Include(co => co.Teacher)
-                    .Where(en => en.EnrolledStudents.Where(ec => ec.StudentId == userId).Count() == 0)
+                    .Where(en => en.EnrolledStudents.All(ec => ec.StudentId != userId))
                     .ToList();
             }
             else if (roleId == 2)

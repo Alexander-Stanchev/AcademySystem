@@ -122,12 +122,12 @@ namespace demo_db.Services
                 throw new ArgumentNullException("Unfortunately there is no such an assignment");
             }
             
-            if (assaignment.Course.TeacherId != teacher.Id)
+            if (teacher != null && assaignment.Course.TeacherId != teacher.Id)
             {
                 throw new ArgumentException($"Teacher {teacher.UserName} is not assigned to {assaignment.Name}.");
             }
 
-            if (!student.EnrolledStudents.Any(c => c.CourseId == assaignment.CourseId))
+            if (student != null && student.EnrolledStudents.All(c => c.CourseId != assaignment.CourseId))
             {
                 throw new ArgumentException($"Student {student.UserName} is not assigned to {assaignment.Name}.");
             }

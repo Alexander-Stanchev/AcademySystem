@@ -19,8 +19,8 @@ namespace demo_db.Tests
         public void AddUserShouldThrowWhenInvalidUserName()
         {
             // Arrange 
-            var mockRepository = new Mock<IDataHandler>();
-            var sut = new UserService(mockRepository.Object);
+            var stubRepository = new Mock<IDataHandler>();
+            var sut = new UserService(stubRepository.Object);
 
             var username = "U";
             var password = "password";
@@ -179,10 +179,53 @@ namespace demo_db.Tests
         }
 
         [TestMethod]
-        public void EnrollCourseShouldThrowWhenUserNull()
+        public void LogInUserShouldThrowIfInvalidUserName()
         {
-            User user = null;
-            var course = new Course();
+            //Arrange
+
+            var username = "P";
+            var stubRepository = new Mock<IDataHandler>();
+            var sut = new UserService(stubRepository.Object);
+
+            //Act and Assert
+
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => sut.LoginUser(username, "parola"));
+        }
+
+        [TestMethod]
+        public void LogInUserShouldThrowIfRegexDoesntMatchUserName()
+        {
+            var username = "Pesho Gosho";
+            var stubRepository = new Mock<IDataHandler>();
+            var sut = new UserService(stubRepository.Object);
+
+            //Act and Assert
+
+            Assert.ThrowsException<ArgumentException>(() => sut.LoginUser(username, "parola"));
+        }
+
+        [TestMethod]
+        public void LogInUserShouldThrowIfUserDoesntExist()
+        {
+            var contextOptions = new DbContextOptionsBuilder<AcademyContext>()
+                .UseInMemoryDatabase(databaseName: "LogInUserShouldThrowIfUserDoesntExist")
+                .Options;
+
+            //Setup roles for the in-memory database
+            var adminRole = new Role { Id = 1, Name = "Administrator" };
+            var teacherRole = new Role { Id = 2, Name = "Teacher" };
+            var studentRole = new Role { Id = 3, Name = "Student" };
+
+            using (var context = new AcademyContext(contextOptions))
+            {
+                var dataHandler = new DataHandler(context);
+                var sut = new UserService(dataHandler);
+                dataHandler.Roles.Add(adminRole);
+                dataHandler.Roles.Add(teacherRole);
+                dataHandler.Roles.Add(studentRole);
+
+                Assert.ThrowsException<UserDoesntExistsException>(() => sut.LoginUser("pesho007", "parola"));
+            }
         }
     }
 }

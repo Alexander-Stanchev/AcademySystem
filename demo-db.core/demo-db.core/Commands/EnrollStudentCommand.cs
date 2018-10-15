@@ -33,7 +33,7 @@ namespace demo_db.core.Commands
                 try
                 {
                     this.serviceCourse.EnrollStudent(this.State.UserName, courseName);
-                    return $"User {this.State.UserName} succesfully enrolled in the course {courseName}";
+                    return $"User {this.State.UserName} successfully enrolled in the course {courseName}";
 
                 }
                 catch(CourseAlreadyEnrolledException ex)
