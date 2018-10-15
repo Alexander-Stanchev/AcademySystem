@@ -2,7 +2,7 @@
 using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
-
+using System;
 
 namespace demo_db.core.Commands
 {
@@ -28,6 +28,12 @@ namespace demo_db.core.Commands
             else
             {
                 var coursename = string.Join(' ', parameters);
+
+                if (coursename == string.Empty)
+                {
+                    throw new Exception("The course name can`t be null");
+                }
+
                 try
                 {
                     var grades = this.serviceCourse.RetrieveGrades(this.State.UserName, coursename);

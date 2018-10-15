@@ -3,9 +3,6 @@ using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace demo_db.core.Commands
 {
