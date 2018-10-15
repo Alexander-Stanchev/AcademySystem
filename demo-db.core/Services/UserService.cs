@@ -55,20 +55,6 @@ namespace demo_db.Services
             return user;
         }
 
-        public User RetrieveFullUser(string username)
-        {
-            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
-            Validations.VerifyUserName(username);
-
-            var user = this.data.Users.All()
-               .Include(u => u.Role)
-               .Include(u => u.Grades)
-               .Include(u => u.EnrolledStudents)
-               .FirstOrDefault(u => u.UserName == username);
-
-            return user;
-        }
-
         public void EnrollCourse(User user, Course course)
         {
             if (user == null)
@@ -135,7 +121,6 @@ namespace demo_db.Services
             {
                 user.RoleId = newRoleString;
             }
-            //data.Users.Update(user);
             data.SaveChanges();
         }
 
@@ -155,7 +140,6 @@ namespace demo_db.Services
         public void EvaluateStudent(string username, int assignmentId, int grade, string teacherUsername)
         {
             Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
-            //Validations.ValidateLength(Validations.MIN_ASS, Validations.MAX_ASS, assignment, $"The course name can't be less than {Validations.MIN_COURSENAME} and greater than {Validations.MAX_COURSENAME}");
             Validations.VerifyUserName(username);
 
             var teacher = this.data.Users.All().Include(us => us.TaughtCourses).FirstOrDefault(us => us.UserName == teacherUsername);
@@ -191,6 +175,20 @@ namespace demo_db.Services
 
             student.Grades.Add(newGrade);
                 this.data.SaveChanges();
+        }
+
+        private User RetrieveFullUser(string username)
+        {
+            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, $"The username can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+            Validations.VerifyUserName(username);
+
+            var user = this.data.Users.All()
+               .Include(u => u.Role)
+               .Include(u => u.Grades)
+               .Include(u => u.EnrolledStudents)
+               .FirstOrDefault(u => u.UserName == username);
+
+            return user;
         }
     }
 }
