@@ -3,6 +3,7 @@ using demo_db.Common.Wrappers;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using System;
+using System.Linq;
 
 namespace demo_db.core.Commands
 {
@@ -27,15 +28,30 @@ namespace demo_db.core.Commands
             else
             {
                 string course = string.Join(' ', parameters.Skip(2)); ;
-                DateTime start = DateTime.Parse(parameters[0]);
-                DateTime end = DateTime.Parse(parameters[1]);
+                DateTime start;
+                DateTime end;
+
+                if (course == string.Empty)
+                {
+                   return("The course name can`t be null");
+                }
+
+                try
+                {
+                    start = DateTime.Parse(parameters[1]);
+                    end = DateTime.Parse(parameters[2]);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Please enter valid DateTime ");
+                }
 
                 try
                 {
                     this.service.AddCourse(this.State.UserName, start, end, course);
                     return $"Course {course} is registered.";
                 }
-                catch (Exception ex)
+                catch (UserAlreadyExistsException ex)
                 {
                     return ex.Message;
                 }
