@@ -73,6 +73,8 @@ namespace demo_db.Tests
             var parameters = new string[] {""};
 
             var result = command.Execute(parameters);
+
+            
         }
 
         [TestMethod]
@@ -93,8 +95,6 @@ namespace demo_db.Tests
 
             var result = command.Execute(parameters);
         }
-
-
 
     }
 }
