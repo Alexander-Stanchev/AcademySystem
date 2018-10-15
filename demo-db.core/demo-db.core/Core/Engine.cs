@@ -51,7 +51,7 @@ namespace demo_db.core.Core
 
             if ((RoleEnum)(this.State.RoleId - 1) == RoleEnum.Teacher)
             {
-                this.Writer.WriteLine("For adding new course: AddCourse {mm-dd-yy} {mm-dd-yy} {course name}");
+                this.Writer.WriteLine("For adding new course: AddCourse {dd-mm-yy} {dd-mm-yy} {course name}");
                 this.Writer.WriteLine("For listing all courses you are assigned to: ListAvailableCourses");
                 this.Writer.WriteLine("For listing all students in a course: ListStudents {course name}");
             }
