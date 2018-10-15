@@ -5,13 +5,12 @@ using demo_db.Services.Abstract;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace demo_db.Tests
 {
     [TestClass]
-    class RegisterUserCommandTest
+    public class RegisterUserCommandTest
     {
         [TestMethod]
         public void ExecuteShouldRetrurnMessageWhenUserNotLogged()
