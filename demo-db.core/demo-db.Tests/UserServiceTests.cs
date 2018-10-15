@@ -86,13 +86,7 @@ namespace demo_db.Tests
                 dataHandler.Roles.Add(studentRole);
 
                 var sut = new UserService(dataHandler);
-                sut.AddUser(username, password, fullname);                
-            }
-
-            using(var assertContext = new AcademyContext(contextOptions))
-            {
-                var dataHandler = new DataHandler(assertContext);
-                var sut = new UserService(dataHandler);
+                sut.AddUser(username, password, fullname);
                 Assert.ThrowsException<UserAlreadyExistsException>(() => sut.AddUser(username, password, fullname));
             }
         }        
