@@ -177,5 +177,12 @@ namespace demo_db.Tests
                 Assert.IsTrue(sut.RetrieveUser("Pesho").FullName == "Gosho Peshov");
             }
         }
+
+        [TestMethod]
+        public void EnrollCourseShouldThrowWhenUserNull()
+        {
+            User user = null;
+            var course = new Course();
+        }
     }
 }
