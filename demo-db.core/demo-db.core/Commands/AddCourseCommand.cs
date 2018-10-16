@@ -43,7 +43,7 @@ namespace demo_db.core.Commands
                 }
                 catch (Exception)
                 {
-                    throw new Exception("Please enter valid DateTime ");
+                    return "Please enter valid DateTime";
                 }
 
                 try
@@ -51,7 +51,7 @@ namespace demo_db.core.Commands
                     this.service.AddCourse(this.State.UserName, start, end, course);
                     return $"Course {course} is registered.";
                 }
-                catch (UserAlreadyExistsException ex)
+                catch (EntityAlreadyExistsException ex)
                 {
                     return ex.Message;
                 }

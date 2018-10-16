@@ -131,7 +131,7 @@ namespace demo_db.Tests
 
                 var sut = new CourseService(dataHandler, userServiceStub.Object);
 
-                Assert.ThrowsException<UserAlreadyExistsException>(() =>
+                Assert.ThrowsException<EntityAlreadyExistsException>(() =>
                     sut.AddCourse(teacherName, DateTime.MinValue, DateTime.MaxValue, courseName));
 
             }

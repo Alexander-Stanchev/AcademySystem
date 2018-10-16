@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using demo_db.core.Contracts;
 using demo_db.core.InjectionLogic;
-using System;
 using System.Reflection;
 
 namespace demo_db.core
@@ -17,6 +16,7 @@ namespace demo_db.core
             var container = builder.Build();
 
             var engine = container.Resolve<IEngine>();
+
             engine.Run();
         }
     }

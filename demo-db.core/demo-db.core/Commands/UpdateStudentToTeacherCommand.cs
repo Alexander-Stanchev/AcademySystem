@@ -25,7 +25,7 @@ namespace demo_db.core.Commands
 
             if (this.State.RoleId != 1)
             {
-                return("You dont have access.");
+                return("You don`t have access.");
             }
 
             if (string.IsNullOrEmpty(parameters[0]))

@@ -10,7 +10,7 @@ namespace demo_db.core.Commands
 {
     public class EvaluateStudentCommand : CommandAbstract
     {
-        private IUserService serviceUser;
+        private readonly IUserService serviceUser;
 
         public EvaluateStudentCommand(ISessionState state, IStringBuilderWrapper builder, IUserService serviceUser) : base(state, builder)
         {
@@ -29,13 +29,19 @@ namespace demo_db.core.Commands
             }
             else
             {
-                string username = parameters[0];
-                int assignmentId = int.Parse(parameters[1]);
-                int grade = int.Parse(parameters[2]);
+                var username = parameters[0];
+                var assignmentId = int.Parse(parameters[1]);
+                var grade = int.Parse(parameters[2]);
+                try
+                {
+                    this.serviceUser.EvaluateStudent(username, assignmentId, grade, this.State.UserName);
+                    return "Grade successfully added.";
+                }
+                catch (ArgumentException ex)
+                {
+                    return ex.Message;
+                }
 
-                this.serviceUser.EvaluateStudent(username, assignmentId, grade, this.State.UserName);
-
-                return "Grade successfully added.";
             }
         }
     }

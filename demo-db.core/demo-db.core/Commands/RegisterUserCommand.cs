@@ -41,15 +41,15 @@ namespace demo_db.core.Commands
                     throw new ArgumentNullException("Full name is null");
                 }
                 
-                string userName = parameters[0];
-                string password = parameters[1];
-                string fullName = string.Join(' ',parameters.Skip(2));
+                var userName = parameters[0];
+                var password = parameters[1];
+                var fullName = string.Join(' ',parameters.Skip(2));
                 try
                 {
                     this.service.AddUser(userName, password, fullName);
                     return $"User {userName} is registered. Now you can log in with your newly created password";
                 }
-                catch(UserAlreadyExistsException ex)
+                catch(EntityAlreadyExistsException ex)
                 {                    
                     return ex.Message;
                 }

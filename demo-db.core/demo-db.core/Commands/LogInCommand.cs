@@ -36,15 +36,15 @@ namespace demo_db.core.Commands
                 {
                     throw new ArgumentNullException("Password is null");
                 }
-                string userName = parameters[0];
-                string password = parameters[1];
+                var userName = parameters[0];
+                var password = parameters[1];
                 try
                 {
                     var role = this.service.LoginUser(userName, password);
                     this.State.Login(role,userName);
                     return $"User {userName} succesfully logged. Your role is {(RoleEnum)(role-1)}";
                 }
-                catch(UserAlreadyExistsException ex)
+                catch(EntityAlreadyExistsException ex)
                 {
                     return ex.Message;
                 }

@@ -38,28 +38,39 @@ namespace demo_db.core.Commands
                     throw new ArgumentOutOfRangeException("No parameters added");
                 }
 
-                string coursename = string.Join(' ', parameters);
+                var coursename = string.Join(' ', parameters);
 
-                IList<UserViewModel> students = this.serviceCourse.RetrieveStudentsInCourse(coursename, this.State.RoleId, this.State.UserName);
+                try
+                {
+                    var students =
+                        this.serviceCourse.RetrieveStudentsInCourse(coursename, this.State.RoleId, this.State.UserName);
 
-                if (students.Count == 0)
-                {
-                    return "There are no available students in this course!";
-                }
-                else
-                {
-                    this.Builder.AppendLine($"The available students in {coursename} are:");
-                    foreach (var student in students)
+                    if (students.Count == 0)
                     {
-                        var grades = student.Grades.Select(gr => gr.Score).ToList();
-                        var averageGrade = grades.Count == 0 ? 0 : grades.Average();
-                        var gradesResult = grades.Count == 0 ? "None" : string.Join(", ", grades);
-                    
-
-                        this.Builder.AppendLine($"Username: {student.Username}, full name: {student.FullName}, Grades: {gradesResult} (Average score: {averageGrade})");
+                        return "There are no available students in this course!";
                     }
-                    return this.Builder.ToString();
+                    else
+                    {
+                        this.Builder.AppendLine($"The available students in {coursename} are:");
+                        foreach (var student in students)
+                        {
+                            var grades = student.Grades.Select(gr => gr.Score).ToList();
+                            var averageGrade = grades.Count == 0 ? 0 : grades.Average();
+                            var gradesResult = grades.Count == 0 ? "None" : string.Join(", ", grades);
+
+
+                            this.Builder.AppendLine(
+                                $"Username: {student.Username}, full name: {student.FullName}, Grades: {gradesResult} (Average score: {averageGrade})");
+                        }
+
+                        return this.Builder.ToString();
+                    }
                 }
+                catch (ArgumentNullException ex)
+                {
+                    return ex.Message;
+                }
+
             }
         }
     }

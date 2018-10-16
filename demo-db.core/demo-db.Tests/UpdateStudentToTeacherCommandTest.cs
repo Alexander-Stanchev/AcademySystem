@@ -53,7 +53,7 @@ namespace demo_db.Tests
             var parameters = new string[] { "UserName"};
 
             //Assert + Act
-            Assert.AreEqual("You dont have access.", command.Execute(parameters));
+            Assert.AreEqual("You don`t have access.", command.Execute(parameters));
         }
 
         [TestMethod]

@@ -90,7 +90,7 @@ namespace demo_db.Tests
                 var sut = new UserService(dataHandler);
                 sut.AddUser(username, password, fullname);
 
-                Assert.ThrowsException<UserAlreadyExistsException>(() => sut.AddUser(username, password, fullname));
+                Assert.ThrowsException<EntityAlreadyExistsException>(() => sut.AddUser(username, password, fullname));
             }
         }
 

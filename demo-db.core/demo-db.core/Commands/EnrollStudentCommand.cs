@@ -7,12 +7,10 @@ namespace demo_db.core.Commands
 {
     public class EnrollStudentCommand : CommandAbstract
     {
-        private readonly IUserService serviceUser;
         private readonly ICourseService serviceCourse;
 
-        public EnrollStudentCommand(ISessionState state, IStringBuilderWrapper builder, IUserService service, ICourseService course) : base(state,builder)
+        public EnrollStudentCommand(ISessionState state, IStringBuilderWrapper builder, ICourseService course) : base(state, builder)
         {
-            this.serviceUser = service;
             this.serviceCourse = course;
         }
 
@@ -20,31 +18,34 @@ namespace demo_db.core.Commands
         {
             if (!this.State.IsLogged)
             {
-                return("Please log before using commands");
+                return ("Please log before using commands");
             }
-            else if(this.State.RoleId != 3)
+            if (this.State.RoleId != 3)
             {
-                return("This command is available only to users with role Student");
+                return ("This command is available only to users with role Student");
             }
-            else
+            if (parameters.Length == 0)
             {
-                var courseName = string.Join(' ',parameters);
+                return "Please enter a valid course name";
+            }
 
-                try
-                {
-                    this.serviceCourse.EnrollStudent(this.State.UserName, courseName);
-                    return $"User {this.State.UserName} successfully enrolled in the course {courseName}";
+            var courseName = string.Join(' ', parameters);
 
-                }
-                catch(CourseAlreadyEnrolledException ex)
-                {
-                    return ex.Message;
-                }
-                catch(CourseDoesntExistsException ex)
-                {
-                    return ex.Message;
-                }
+            try
+            {
+                this.serviceCourse.EnrollStudent(this.State.UserName, courseName);
+                return $"User {this.State.UserName} successfully enrolled in the course {courseName}";
+
+            }
+            catch (CourseAlreadyEnrolledException ex)
+            {
+                return ex.Message;
+            }
+            catch (CourseDoesntExistsException ex)
+            {
+                return ex.Message;
             }
         }
+
     }
 }

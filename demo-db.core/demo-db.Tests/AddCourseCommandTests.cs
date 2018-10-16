@@ -2,17 +2,10 @@
 using demo_db.Common.Wrappers;
 using demo_db.core.Commands;
 using demo_db.core.Contracts;
-using demo_db.Data.Context;
-using demo_db.Data.DataModels;
-using demo_db.Data.Repositories;
-using demo_db.Services;
 using demo_db.Services.Abstract;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace demo_db.Tests
 {
@@ -90,7 +83,8 @@ namespace demo_db.Tests
             
             var parameters = new string[] { "Alpha_JS", "pesho", "pesho" };
             //Assert + Act
-            Assert.ThrowsException<Exception>(() => command.Execute(parameters));
+            var result = command.Execute(parameters);
+            Assert.AreEqual("Please enter valid DateTime", result);
         }
 
         //Test fails due to difference in the DateTime format
@@ -132,7 +126,7 @@ namespace demo_db.Tests
 
             service.Setup(s =>
                     s.AddCourse("pesho", DateTime.Parse("06-22-2012"), DateTime.Parse("06-22-2013"), "Alpha JS"))
-                .Throws(new UserAlreadyExistsException("Course already exists"));
+                .Throws(new EntityAlreadyExistsException("Course already exists"));
                
 
             var command = new AddCourseCommand(state.Object, builder.Object, service.Object);

@@ -37,7 +37,7 @@ namespace demo_db.Services
 
             if (course != null)
             {
-                throw new UserAlreadyExistsException("Course already exists");
+                throw new EntityAlreadyExistsException("Course already exists");
             }
 
             course = new Course

@@ -30,7 +30,7 @@ namespace demo_db.Services
 
             if (user != null)
             {
-                throw new UserAlreadyExistsException("User already exists");
+                throw new EntityAlreadyExistsException("User already exists");
             }
 
             user = new User
@@ -50,7 +50,7 @@ namespace demo_db.Services
         {
             if (username == null)
             {
-                throw new ArgumentNullException("username is null");
+                throw new ArgumentNullException("Username is null");
             }
             var user = this.data.Users.All()
                 .Include(u => u.Role)
@@ -86,7 +86,7 @@ namespace demo_db.Services
                 throw new InvalidOperationException("You are not allowed to set someone's role to Adminitrator");
             }
 
-            var user = RetrieveFullUser(username);
+            var user = RetrieveUser(username);
 
             if (user == null)
             {
