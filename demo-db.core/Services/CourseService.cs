@@ -67,7 +67,7 @@ namespace demo_db.Services
             {
                 throw new CourseDoesntExistsException("Unfortunately we are not offering such a course at the moment");
             }
-            else if (user.EnrolledStudents.FirstOrDefault(es => es.CourseId == course.CourseId) != null)
+            else if (user.EnrolledStudents.Any(es => es.CourseId == course.CourseId))
             {
                 throw new CourseAlreadyEnrolledException($"You are already enrolled for the course {course.Name}.");
             }
@@ -83,7 +83,7 @@ namespace demo_db.Services
             }
         }
 
-        public IList<CourseViewModel> RetrieveCourseNames(int roleId, string username = "")
+        public IList<CourseViewModel> RetrieveCourseNames(int roleId, string username)
         {
             var user = this.data.Users.All().FirstOrDefault(us => us.UserName == username);
             var userId = user.Id;
@@ -92,14 +92,16 @@ namespace demo_db.Services
 
             if (roleId == 3)
             {
-                courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
+                courses = this.data.Courses.All()
+                    .Include(co => co.EnrolledStudents)
                     .Include(co => co.Teacher)
-                    .Where(en => en.EnrolledStudents.All(ec => ec.StudentId != userId))
+                    .Where(en => en.EnrolledStudents.All(ec => ec.StudentId != userId) || en.EnrolledStudents == null)
                     .ToList();
             }
             else if (roleId == 2)
             {
-                courses = this.data.Courses.All().Include(co => co.EnrolledStudents)
+                courses = this.data.Courses.All()
+                 .Include(co => co.EnrolledStudents)
                  .Include(co => co.Teacher)
                  .Where(c => c.TeacherId == user.Id)
                  .ToList();
@@ -166,10 +168,13 @@ namespace demo_db.Services
 
         public IList<UserViewModel> RetrieveStudentsInCourse(string coursename, int roleId, string username)
         {
-            if (coursename == null)
-            {
-                throw new ArgumentNullException("coursename is null");
-            }
+            Validations.ValidateLength(Validations.MIN_COURSENAME, Validations.MAX_COURSENAME, coursename,
+                $"The course name can't be less than {Validations.MIN_COURSENAME} and greater than {Validations.MAX_COURSENAME}");
+
+            Validations.ValidateLength(Validations.MIN_USERNAME, Validations.MAX_USERNAME, username, 
+                $"The course name can't be less than {Validations.MIN_USERNAME} and greater than {Validations.MAX_USERNAME}");
+
+            Validations.VerifyUserName(username);
 
             var course = RetrieveCourse(coursename);
 
@@ -185,10 +190,6 @@ namespace demo_db.Services
                 throw new ArgumentNullException("Not the teacher for this course");
             }
 
-            if (teacher == null)
-            {
-                throw new ArgumentNullException("I can find teacher with this username");
-            }
 
             var users = this.data.Users.All()
                 .Where(us => us.EnrolledStudents.Any(es => es.Course.Name == coursename))
