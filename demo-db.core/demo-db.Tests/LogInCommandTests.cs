@@ -1,30 +1,32 @@
-﻿using demo_db.Common.Wrappers;
+﻿using demo_db.Common.Enum;
+using demo_db.Common.Wrappers;
 using demo_db.core.Commands;
 using demo_db.core.Contracts;
 using demo_db.Services.Abstract;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-
+using System.Collections.Generic;
+using System.Text;
 
 namespace demo_db.Tests
 {
     [TestClass]
-    public class RegisterUserCommandTest
+    public class LogInCommandTests
     {
         [TestMethod]
-        public void ExecuteShouldRetrurnMessageWhenUserLogged()
+        public void ExecuteShouldReturnMessageWhenAlreadyLogged()
         {
             // Arrange 
             var state = new Mock<ISessionState>();
             var builder = new Mock<IStringBuilderWrapper>();
             var service = new Mock<IUserService>();
 
-            var command = new RegisterUserCommand(state.Object, builder.Object, service.Object);
+            var command = new LogInCommand(state.Object, builder.Object, service.Object);
 
             state.SetupGet(m => m.IsLogged).Returns(true);
 
-            var parameters = new string[] { "Username", "pass", "First", "Last" };
+            var parameters = new string[] { "UserName", "12345" };
 
             //Assert + Act
             Assert.AreEqual("You are already logged.", command.Execute(parameters));
@@ -32,74 +34,76 @@ namespace demo_db.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ExecuteShouldThrowExceptionWhenLessThan4ParametersPassed()
+        public void ExecuteShouldThrowExceptionWhenLessThan2ParametersPassed()
         {
             // Arrange 
             var state = new Mock<ISessionState>();
             var builder = new Mock<IStringBuilderWrapper>();
             var service = new Mock<IUserService>();
 
-            var command = new RegisterUserCommand(state.Object, builder.Object, service.Object);
+            var command = new LogInCommand(state.Object, builder.Object, service.Object);
 
             state.SetupGet(m => m.IsLogged).Returns(false);
-            
 
-            var parameters = new string[] { "username", "1234", "asd" };
+            var parameters = new string[] { "asd" };
 
             var result = command.Execute(parameters);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ExecuteShouldThrowExceptionWhenUsernameIsNull()
+        public void ExecuteShouldThrowExceptionWhenNoUsernamePassed()
         {
             // Arrange 
             var state = new Mock<ISessionState>();
             var builder = new Mock<IStringBuilderWrapper>();
             var service = new Mock<IUserService>();
 
-            var command = new RegisterUserCommand(state.Object, builder.Object, service.Object);
+            var command = new LogInCommand(state.Object, builder.Object, service.Object);
 
             state.SetupGet(m => m.IsLogged).Returns(false);
-            
-            var parameters = new string[] { "", "1234", "First", "Last"};
+
+            var parameters = new string[] { "", "12345" };
 
             var result = command.Execute(parameters);
+
+
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ExecuteShouldThrowExceptionWhenPasswordIsNull()
+        public void ExecuteShouldThrowExceptionWhenNoPassPassed()
         {
             // Arrange 
             var state = new Mock<ISessionState>();
             var builder = new Mock<IStringBuilderWrapper>();
             var service = new Mock<IUserService>();
 
-            var command = new RegisterUserCommand(state.Object, builder.Object, service.Object);
+            var command = new LogInCommand(state.Object, builder.Object, service.Object);
 
             state.SetupGet(m => m.IsLogged).Returns(false);
 
-            var parameters = new string[] { "userName", "", "First", "Last" };
+            var parameters = new string[] { "username", "" };
 
             var result = command.Execute(parameters);
         }
 
         [TestMethod]
-        public void ExecuteShouldMessageWhenCommandExecuteSuccessfuly()
+        public void ExecuteShouldReturnMessageWhenCommandExecuteSuccessfully()
         {
             // Arrange 
             var state = new Mock<ISessionState>();
             var builder = new Mock<IStringBuilderWrapper>();
             var service = new Mock<IUserService>();
 
-            var command = new RegisterUserCommand(state.Object, builder.Object, service.Object);
+            var command = new LogInCommand(state.Object, builder.Object, service.Object);
 
             state.SetupGet(m => m.IsLogged).Returns(false);
 
-            var parameters = new string[] { "userName", "abc1234", "First", "Last" };
+            var parameters = new string[] { "username", "12345" };
 
-            Assert.AreEqual("User userName is registered. Now you can log in with your newly created password", command.Execute(parameters));
+            //Assert+Act
+            Assert.AreEqual("User username succesfully logged. Your role is -1", command.Execute(parameters));
         }
 
     }

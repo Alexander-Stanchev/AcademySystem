@@ -28,11 +28,11 @@ namespace demo_db.core.Commands
                 {
                     throw new ArgumentOutOfRangeException("You should provide at least 2 parameters for this command");
                 }
-                else if (parameters[0] == null)
+                else if (string.IsNullOrEmpty(parameters[0]))
                 {
-                    throw new ArgumentNullException("User name is null");
+                    throw new ArgumentNullException("Username is null");
                 }
-                else if (parameters[1] == null)
+                else if (string.IsNullOrEmpty(parameters[1]))
                 {
                     throw new ArgumentNullException("Password is null");
                 }

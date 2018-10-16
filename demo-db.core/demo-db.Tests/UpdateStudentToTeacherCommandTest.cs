@@ -96,5 +96,24 @@ namespace demo_db.Tests
             var result = command.Execute(parameters);
         }
 
+        [TestMethod]
+        public void ExecuteShouldReturnMessageWhenCommandExecuteSuccessfully()
+        {
+            // Arrange 
+            var state = new Mock<ISessionState>();
+            var builder = new Mock<IStringBuilderWrapper>();
+            var service = new Mock<IUserService>();
+
+            var command = new UpdateStudentToTeacherCommand(state.Object, builder.Object, service.Object);
+
+            state.SetupGet(m => m.IsLogged).Returns(true);
+            state.SetupGet(m => m.RoleId).Returns(1);
+
+            var parameters = new string[] { "username"};
+
+            //Assert+Act
+            Assert.AreEqual("User username role is updated.", command.Execute(parameters));
+        }
+
     }
 }
