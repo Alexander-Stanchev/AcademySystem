@@ -8,7 +8,7 @@ using demo_db.Services.Abstract;
 
 namespace demo_db.core.Commands
 {
-    class ListUsersCommand : CommandAbstract
+    public class ListUsersCommand : CommandAbstract
     {
         private readonly IUserService serviceUser;
 
